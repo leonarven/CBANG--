@@ -11,7 +11,7 @@
 #include <vector>
 #include <cstdlib>
 #include <cstring>
-#include "../common.hpp"
+#include "common.hpp"
 
 class
 {
@@ -21,7 +21,8 @@ public:
         msg message;
         message.buf = buf;
 
-        if (buf[0] == '\t' || buf[0] == '/') // Buffer is command
+        // if buffer is command
+        if (buf[0] == '\t' || buf[0] == '/')
         {
             switch (buf[1])
             {
