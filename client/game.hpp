@@ -1,5 +1,5 @@
 #include <iostream>
-#include "msg.hpp"
+#include "../common.hpp"
 
 using namespace std;
 

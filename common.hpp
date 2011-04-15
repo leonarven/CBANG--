@@ -5,7 +5,7 @@ enum CARDS {
 
 };
 
-enum CARDS {
+enum ACTION {
 
 };
 
@@ -14,9 +14,9 @@ class msg {
 		msg(char *_buf) : buf(_buf) {
 
 		}
+		char type;
 	private:
 		char* buf;
-
 };
 
 

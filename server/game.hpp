@@ -8,12 +8,11 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
-#inlcude <vector>
+#include <vector>
 
 using namespace std;
 
 enum KORTTI {
-	BYROKRAATTI,
 }
 
 struct kortti {
