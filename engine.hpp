@@ -16,7 +16,7 @@
 class
 {
 public:
-    msg Parse(char* buf)
+    msg Parse(std::string buf)
     {
         msg message;
         message.buf = buf;
@@ -27,6 +27,8 @@ public:
             {
             case 'A':
                 message.type = ACTION;
+                break;
+            case 'D':
                 break;
             default:
                 message.type = TEXT;
