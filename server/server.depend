@@ -1,0 +1,7 @@
+# depslib dependency file v1.0
+1302529184 source:/media/Windows/Users/leonarven/Ohjelmointi/C++/dominion/server/main.cpp
+	<iostream>
+	<cstdlib>
+	<string>
+	<SDL/SDL_net.h>
+

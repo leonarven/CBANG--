@@ -1,0 +1,18 @@
+# depslib dependency file v1.0
+1279782492 source:/media/Windows/Users/leonarven/Ohjelmointi/C++/dominion/client/main.cpp
+	"chat_client.h"
+
+1279782497 /media/Windows/Users/leonarven/Ohjelmointi/C++/dominion/client/chat_client.h
+	<cstdlib>
+	<deque>
+	<iostream>
+	<boost/bind.hpp>
+	<boost/asio.hpp>
+	<boost/thread.hpp>
+	"chat_message.h"
+
+1279782109 /media/Windows/Users/leonarven/Ohjelmointi/C++/dominion/client/chat_message.h
+	<cstdio>
+	<cstdlib>
+	<cstring>
+
