@@ -4,23 +4,26 @@
 #define PORT 6661
 #define BUFFER_SIZE 6661
 
+#include <vector>
+
 enum CARDS {
 
 };
 
 enum ACTION {
-
+	NULL,
+	BANG
 };
 
-class msg {
-	public:
-		msg(char *_buf) : buf(_buf) {
-
-		}
-		char type;
-	private:
-		char* buf;
+enum MSG_TYPE {
+	TEXT,
+	ACTION
 };
 
+struct msg {
+	MSG_TYPE type;
+	char* buf;
+	std::vector<char> options;
+};
 
 #endif
