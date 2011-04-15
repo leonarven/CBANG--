@@ -9,7 +9,8 @@ enum {
 	ERRNO_TOO_LESS_ARGS,
 	ERRNO_NOT_VALID_ADDR,
 	ERRNO_CANT_CONNECT,
-	ERRNO_CANT_RECEIVE
+	ERRNO_CANT_RECEIVE,
+	ERRNO_CANT_SEND
 };
 
 class {
@@ -19,14 +20,14 @@ class {
 
 struct {
 	std::size_t size;
-	char data[BUFFER_SIZE] = {0}
+	char data[BUFFER_SIZE];
 } buf;
 
 int main (int argc, char **argv) {
     sf::SocketTCP Client;
 
  	if (argc<2) {
-		cout << "Le Phuil!" << endl;
+		cout << "Käyttö: client <<Serverin osoite>>!" << endl;
 		return ERRNO_TOO_LESS_ARGS;
 	} else {
 		server.addr = sf::IPAddress(argv[1]);
@@ -36,15 +37,12 @@ int main (int argc, char **argv) {
 		}
 	}
 
-    if (Client.Connect(PORT, ServerAddress) != sf::Socket::Done) return ERRNO_CANT_CONNECT;
+    if (Client.Connect(PORT, server.addr) != sf::Socket::Done) return ERRNO_CANT_CONNECT;
     cout << "Yhdistetty serverille " << server.addr << endl;
 
 	while(false) {
 		if (Client.Receive(buf.data, BUFFER_SIZE, buf.size) != sf::Socket::Done) return ERRNO_CANT_RECEIVE;
-		cout << "Message received from server : \"" << Message << "\"" << endl;
-		char ToSend[128] = "Hi, I'm a client !";
-		if (Client.Send(ToSend, sizeof(ToSend)) != sf::Socket::Done) return;
-		cout << "MEssage sent to server : \"" << ToSend << "\"" << endl;
+		cout << "Vastaanotettu:\n\t" << buf.data << "\n" << endl;
 	}
     Client.Close();
 

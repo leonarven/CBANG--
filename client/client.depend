@@ -16,3 +16,11 @@
 	<cstdlib>
 	<cstring>
 
+1302901044 source:/media/Windows/Users/leonarven/Ohjelmointi/C++/BANG/client/main.cpp
+	<SFML/Network.hpp>
+	<iostream>
+	<string>
+	"../common.hpp"
+
+1302899743 /media/Windows/Users/leonarven/Ohjelmointi/C++/BANG/common.hpp
+
