@@ -9,3 +9,18 @@
 	<SFML/Network.hpp>
 	<iostream>
 
+1302908056 source:/home/sante/Projects/BANG-/server/main.cpp
+	<iostream>
+	<SFML/Network.hpp>
+	"../common.hpp"
+	"game.hpp"
+
+1302904969 /home/sante/Projects/BANG-/common.hpp
+	<vector>
+
+1302908071 /home/sante/Projects/BANG-/server/game.hpp
+	<vector>
+	<cstdlib>
+	<cstring>
+	"../common.hpp"
+

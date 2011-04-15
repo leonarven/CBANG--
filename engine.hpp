@@ -35,7 +35,8 @@ public:
 
             for (unsigned int i = 2; i < strlen(buf); i++)
             {
-
+                message.options.push_back(buf[i] - '0');
+                std::cout << message.options.back() << std::endl;
             }
         }
         else

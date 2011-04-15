@@ -24,3 +24,12 @@
 
 1302899743 /media/Windows/Users/leonarven/Ohjelmointi/C++/BANG/common.hpp
 
+1302904570 source:/home/sante/Projects/BANG-/client/main.cpp
+	<SFML/Network.hpp>
+	<iostream>
+	<string>
+	"../common.hpp"
+
+1302904969 /home/sante/Projects/BANG-/common.hpp
+	<vector>
+

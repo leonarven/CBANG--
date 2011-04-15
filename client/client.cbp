@@ -38,10 +38,9 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
-		<Unit filename="game.hpp" />
 		<Unit filename="main.cpp" />
-		<Unit filename="msg.hpp" />
 		<Unit filename="../common.hpp" />
+		<Unit filename="../engine.hpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
