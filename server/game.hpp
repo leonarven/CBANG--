@@ -13,23 +13,24 @@
 using namespace std;
 
 enum KORTTI {
-}
+
+};
 
 struct kortti {
 
-}
+};
 
 class pelaaja {
 	public:
-	pelaaja pelaaja() {}
-	vector<kortti> kortit
-}
+	pelaaja() {}
+	vector<kortti> kortit;
+};
 
 class moottori {
 	public:
 		int vuoro;
 	private:
 		vector<pelaaja> pelaajat;
-}
+};
 #endif // GAME_HPP
 
