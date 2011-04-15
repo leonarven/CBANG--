@@ -2,16 +2,9 @@
 #include <iostream>
 #include <string>
 #include "../common.hpp"
+#include "../engine.hpp"
 
 using namespace std;
-
-enum {
-	ERRNO_TOO_LESS_ARGS,
-	ERRNO_NOT_VALID_ADDR,
-	ERRNO_CANT_CONNECT,
-	ERRNO_CANT_RECEIVE,
-	ERRNO_CANT_SEND
-};
 
 class {
 	public:
@@ -25,6 +18,7 @@ struct {
 } buf;
 
 string str;
+sf::Packet packetSend, packetReceive;
 
 int main (int argc, char **argv) {
  	if (argc<2) {
@@ -43,12 +37,24 @@ int main (int argc, char **argv) {
 
     cout << "Yhdistetty serverille " << server.addr << endl;
 
+	packetReceive.Clear();
+	server.socket.Receive(packetReceive);
+	string tmp;
+	packetReceive >> tmp;
+	cout << "\"" << tmp << "\"" << endl;
+
 	bool Connected = true;
 	while (Connected) {
-        sf::Packet Packet;
+		packetSend.Clear();
         std::getline(std::cin, str);
-        Packet << str;
-        Connected = (server.socket.Send(Packet) == sf::Socket::Done && str.compare("shutdown"));
+        packetSend << str;
+        Connected = (server.socket.Send(packetSend) == sf::Socket::Done && str.compare("shutdown"));
+
+		packetReceive.Clear();
+        server.socket.Receive(packetReceive);
+        string tmp;
+        packetReceive >> tmp;
+        cout << "\"" << tmp << "\"" << endl;
 	}
 	cout << "Sammutetaan client" << endl;
     server.socket.Close();
