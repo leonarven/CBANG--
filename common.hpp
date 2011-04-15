@@ -6,12 +6,20 @@
 
 #include <vector>
 
+enum ERRORS {
+	ERRNO_TOO_LESS_ARGS,
+	ERRNO_NOT_VALID_ADDR,
+	ERRNO_CANT_CONNECT,
+	ERRNO_CANT_RECEIVE,
+	ERRNO_CANT_SEND
+};
+
 enum CARDS {
 
 };
 
 enum ACTION {
-	NULL,
+	NONE,
 	BANG
 };
 
