@@ -1,6 +1,8 @@
 #ifndef BANG_COMMON_HPP
 #define BANG_COMMON_HPP
 
+#define PORT 6661
+
 enum CARDS {
 
 };

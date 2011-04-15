@@ -40,10 +40,10 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Linker>
-			<Add option="-lSDL" />
-			<Add option="-lSDLmain" />
-			<Add option="-lSDL_net" />
+			<Add option="-lsfml-network" />
+			<Add option="-lsfml-system" />
 		</Linker>
+		<Unit filename="../common.hpp" />
 		<Unit filename="game.hpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>

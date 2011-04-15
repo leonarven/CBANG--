@@ -29,9 +29,9 @@
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
-					<Add option="-lSDL" />
-					<Add option="-lSDLmain" />
-					<Add option="-lSDL_net" />
+					<Add option="-lsfml-network" />
+					<Add option="-lsfml-system" />
+					<Add option="-lsfml-window" />
 				</Linker>
 			</Target>
 		</Build>
@@ -41,6 +41,7 @@
 		<Unit filename="game.hpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="msg.hpp" />
+		<Unit filename="../common.hpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
