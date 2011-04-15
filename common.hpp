@@ -2,6 +2,7 @@
 #define BANG_COMMON_HPP
 
 #define PORT 6661
+#define BUFFER_SIZE 6661
 
 enum CARDS {
 

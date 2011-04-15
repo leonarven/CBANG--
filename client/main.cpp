@@ -3,60 +3,50 @@
 #include <string>
 #include "../common.hpp"
 
-
 using namespace std;
-    //Client.Close();
+
+enum {
+	ERRNO_TOO_LESS_ARGS,
+	ERRNO_NOT_VALID_ADDR,
+	ERRNO_CANT_CONNECT,
+	ERRNO_CANT_RECEIVE
+};
 
 class {
 	public:
 	sf::IPAddress addr;
 } server;
 
+struct {
+	std::size_t size;
+	char data[BUFFER_SIZE] = {0}
+} buf;
+
 int main (int argc, char **argv) {
+    sf::SocketTCP Client;
+
  	if (argc<2) {
 		cout << "Le Phuil!" << endl;
-		return 0;
+		return ERRNO_TOO_LESS_ARGS;
 	} else {
 		server.addr = sf::IPAddress(argv[1]);
 		if (!server.addr.IsValid()) {
 			cout << "Osoite ei ole kelvollinen." << endl;
-			return 0;
+			return ERRNO_NOT_VALID_ADDR;
 		}
 	}
-	return 1;
 
-/*    // Create a TCP socket for communicating with server
-    sf::SocketTCP Client;
+    if (Client.Connect(PORT, ServerAddress) != sf::Socket::Done) return ERRNO_CANT_CONNECT;
+    cout << "Yhdistetty serverille " << server.addr << endl;
 
-    // Connect to the specified server
-    if (Client.Connect(PORT, ServerAddress) != sf::Socket::Done)
-        return;
-	{
-    std::cout << "Connected to server " << ServerAddress << std::endl;
+	while(false) {
+		if (Client.Receive(buf.data, BUFFER_SIZE, buf.size) != sf::Socket::Done) return ERRNO_CANT_RECEIVE;
+		cout << "Message received from server : \"" << Message << "\"" << endl;
+		char ToSend[128] = "Hi, I'm a client !";
+		if (Client.Send(ToSend, sizeof(ToSend)) != sf::Socket::Done) return;
+		cout << "MEssage sent to server : \"" << ToSend << "\"" << endl;
 	}
+    Client.Close();
 
-    // Receive a message from the client
-    char Message[128];
-    std::size_t Received;
-    if (Client.Receive(Message, sizeof(Message), Received) != sf::Socket::Done)
-        return;
-
-    // Show it
-	{
-    std::cout << "Message received from server : \"" << Message << "\"" << std::endl;
-	}
-
-    // Define a message to send back to the server
-    char ToSend[128] = "Hi, I'm a client !";
-
-    // Send the message
-    if (Client.Send(ToSend, sizeof(ToSend)) != sf::Socket::Done)
-        return;
-	{
-    std::cout << "MEssage sent to server : \"" << ToSend << "\"" << std::endl;
-	}
-
-	int a;
-	std::cin >> a;
-	return 0;*/
+	return 0;
 }
