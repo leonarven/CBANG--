@@ -31,7 +31,7 @@ enum MSG_TYPE {
 struct msg {
 	MSG_TYPE type;
 	char* buf;
-	std::vector<char> options;
+	std::vector<int> options;
 };
 
 #endif

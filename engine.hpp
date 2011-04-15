@@ -30,18 +30,17 @@ public:
                 break;
             default:
                 message.type = TEXT;
-                break;
+                return message;
             }
 
             for (unsigned int i = 2; i < strlen(buf); i++)
             {
-                message.options.push_back(buf[i] - '0');
-                std::cout << message.options.back() << std::endl;
+                message.options.push_back(buf[i]);
+                std::cout << buf[i] << std::endl;
             }
         }
         else
             message.type = TEXT;
-
 
         return message;
     }
