@@ -1,67 +1,83 @@
-#include <SFML/Network.hpp>
-#include <iostream>
+#include<iostream>
+#include<SFML/Network.hpp>
 #include "../common.hpp"
 
-void DoServerTCP(unsigned short Port) // short
+
+void DoServer(unsigned short Port)
 {
-    // Create a TCP socket for communicating with clients
-    sf::SocketTCP Server;
-
-    // Listen to a port for incoming connections
-    if (!Server.Listen(Port))
+    // Create a socket for listening to incoming connections
+    sf::SocketTCP Listener;
+    if (!Listener.Listen(Port))
         return;
-	{
-    std::cout << "Server is listening to port " << Port << ", waiting for connections... " << std::endl;
-	}
+    std::cout << "Listening to port " << Port << ", waiting for connections..." << std::endl;
 
+    // Create a selector for handling several sockets (the listener + the socket associated to each client)
+    sf::SelectorTCP Selector;
 
-    // Wait for a connection
-    sf::IPAddress ClientAddress;
-    sf::SocketTCP Client;
-    Server.Accept(Client, &ClientAddress);
-    std::cout << "Client connected : " << ClientAddress << std::endl;
+    // Add the listener
+    Selector.Add(Listener);
 
-    // Send a message to the client
-    char ToSend[128] = "Hi, I'm the server";
-    if (Client.Send(ToSend, sizeof(ToSend)) != sf::Socket::Done)
-        return;
-	{
-    std::cout << "Message sent to the client : \"" << ToSend << "\"" << std::endl;
-	}
+    // Loop while... we close the program :)
+    while (true)
+    {
+        // Get the sockets ready for reading
+        unsigned int NbSockets = Selector.Wait();
 
-    // Receive a message back from the client
-    char Message[128]; //128
-    std::size_t Received;
-    if (Client.Receive(Message, sizeof(Message), Received) != sf::Socket::Done)
-        return;
-	{
-    // Show the message
-    std::cout << "Message received from the client : \"" << Message << "\"" << std::endl;
-	}
+        // We can read from each returned socket
+        for (unsigned int i = 0; i < NbSockets; ++i)
+        {
+            // Get the current socket
+            sf::SocketTCP Socket = Selector.GetSocketReady(i);
 
-    // Close the sockets when we're done
-    Client.Close();
-    Server.Close();
+            if (Socket == Listener)
+            {
+                // If the listening socket is ready, it means that we can accept a new connection
+                sf::IPAddress Address;
+                sf::SocketTCP Client;
+                Listener.Accept(Client, &Address);
+                std::cout << "Client connected ! (" << Address << ")" << std::endl;
+
+                // Add it to the selector
+                Selector.Add(Client);
+            }
+            else
+            {
+                // Else, it is a client socket so we can read the data he sent
+                sf::Packet Packet;
+                if (Socket.Receive(Packet) == sf::Socket::Done)
+                {
+                    // Extract the message and display it
+                    std::string Message;
+                    Packet >> Message;
+                    std::cout << "A client says : \"" << Message << "\"" << std::endl;
+                }
+                else
+                {
+                    // Error : we'd better remove the socket from the selector
+                    Selector.Remove(Socket);
+                }
+            }
+        }
+    }
 }
 
 
+////////////////////////////////////////////////////////////
+/// Entry point of application
+///
+/// \return Application exit code
+///
+////////////////////////////////////////////////////////////
 int main()
 {
-	using namespace std;
+    // Choose a random port for opening sockets (ports < 1024 are reserved)
+    const unsigned short Port = PORT;
+        DoServer(Port);
 
-	cout << "Identifying PC ...\n" << endl;
+    // Wait until the user presses 'enter' key
+    std::cout << "Press enter to exit..." << std::endl;
+    std::cin.ignore(10000, '\n');
+    std::cin.ignore(10000, '\n');
 
-	sf::IPAddress Address1 = sf::IPAddress::GetLocalAddress();
-	sf::IPAddress Address2 = sf::IPAddress::GetPublicAddress();
-
-	cout << "Local  IP:" << Address1 << endl;
-	cout << "Public IP:" << Address2 << endl << endl;
-	cout << "Identification stage 1 complete ...\n";
-
-	int x=4567;
-	DoServerTCP(PORT);
-
-	int a;
-	cin >> a;
-	return 0;
+    return EXIT_SUCCESS;
 }
