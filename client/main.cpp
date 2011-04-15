@@ -40,7 +40,7 @@ int main (int argc, char **argv) {
     if (Client.Connect(PORT, server.addr) != sf::Socket::Done) return ERRNO_CANT_CONNECT;
     cout << "Yhdistetty serverille " << server.addr << endl;
 
-	while(false) {
+	while(true) {
 		if (Client.Receive(buf.data, BUFFER_SIZE, buf.size) != sf::Socket::Done) return ERRNO_CANT_RECEIVE;
 		cout << "Vastaanotettu:\n\t" << buf.data << "\n" << endl;
 	}
