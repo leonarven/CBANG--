@@ -44,6 +44,7 @@ int main (int argc, char **argv) {
 		if (Client.Receive(buf.data, BUFFER_SIZE, buf.size) != sf::Socket::Done) return ERRNO_CANT_RECEIVE;
 		cout << "Vastaanotettu:\n\t" << buf.data << "\n" << endl;
 	}
+	cout << "Sammutetaan client" << endl;
     Client.Close();
 
 	return 0;

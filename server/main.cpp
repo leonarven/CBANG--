@@ -1,5 +1,6 @@
 #include <SFML/Network.hpp>
 #include <iostream>
+#include "../common.hpp"
 
 void DoServerTCP(unsigned short Port) // short
 {
@@ -58,7 +59,7 @@ int main()
 	cout << "Identification stage 1 complete ...\n";
 
 	int x=4567;
-	DoServerTCP(x);
+	DoServerTCP(PORT);
 
 	int a;
 	cin >> a;
