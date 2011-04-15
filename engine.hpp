@@ -16,7 +16,7 @@
 class
 {
 public:
-    msg Parse(std::string buf)
+    msg Parse(char* buf)
     {
         msg message;
         message.buf = buf;
@@ -37,8 +37,7 @@ public:
 
             for (unsigned int i = 2; i < strlen(buf); i++)
             {
-                message.options.push_back(buf[i]);
-                std::cout << buf[i] << std::endl;
+                message.options.push_back((int)buf[i]);
             }
         }
         else
