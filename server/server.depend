@@ -24,3 +24,29 @@
 	<cstring>
 	"../common.hpp"
 
+1302913454 source:/media/Windows/Users/leonarven/Ohjelmointi/C++/BANG-/server/main.cpp
+	<iostream>
+	<SFML/Network.hpp>
+	"../engine.hpp"
+	"../common.hpp"
+	"game.hpp"
+
+1302913454 /media/Windows/Users/leonarven/Ohjelmointi/C++/BANG-/engine.hpp
+	<vector>
+	<cstdlib>
+	<cstring>
+	"common.hpp"
+
+1302909790 /media/Windows/Users/leonarven/Ohjelmointi/C++/BANG-/common.hpp
+	<vector>
+
+1302913454 /media/Windows/Users/leonarven/Ohjelmointi/C++/BANG-/server/game.hpp
+	"../player.hpp"
+
+1302913454 /media/Windows/Users/leonarven/Ohjelmointi/C++/BANG-/player.hpp
+	"common.hpp"
+	"card.hpp"
+
+1302913454 /media/Windows/Users/leonarven/Ohjelmointi/C++/BANG-/card.hpp
+	"common.hpp"
+

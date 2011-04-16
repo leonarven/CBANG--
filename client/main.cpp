@@ -21,7 +21,7 @@ struct {
 sf::Packet packetSend, packetReceive;
 
 vector<player> players;
-int turn = 1, myId = 0;
+int turn = 0, myId = 0;
 
 string str;
 int main (int argc, char **argv) {
@@ -41,6 +41,9 @@ int main (int argc, char **argv) {
 
     cout << "Yhdistetty serverille " << server.addr << endl;
 	string str;
+	server.socket.Receive(packetReceive);
+	packetReceive >> str;
+	cout << "< \"" <<  str<< "\"" << endl;
 	/* PING */
 	server.socket.Receive(packetReceive);
 	packetReceive >> str;
@@ -68,7 +71,25 @@ int main (int argc, char **argv) {
 		}
         server.socket.Receive(packetReceive);
         packetReceive >> str;
-        Engine.Parse(str);
+        tmp = Engine.Parse(str);
+
+
+        if (!str.compare("shutdown")) {
+			Connected = false;
+        } else if (tmp.buf[0]=='\t') {
+			if (tmp.buf[1]=='T') {
+				turn = tmp.options.at(0)-(int)'0';
+			} else if (tmp.buf[1]=='P') {
+				packetSend.Clear();
+				packetSend << str;
+				server.socket.Send(packetSend);
+				packetSend.Clear();
+			}
+        }
+
+
+
+
         cout << myId << ": < \"" << str<< "\"" << endl;
 	}
 	cout << "Sammutetaan client" << endl;
