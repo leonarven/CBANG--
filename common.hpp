@@ -5,8 +5,9 @@
 #define BUFFER_SIZE 6661
 
 #include <vector>
-
 #include <sstream>
+
+#define DEBUG(str) std::cout << "\aDEBUG, " << __LINE__ << ": [" << str << "]" << std::endl;
 
 template <class T>
 inline std::string to_string (const T& t)
