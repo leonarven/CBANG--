@@ -4,32 +4,36 @@
 #include <SFML/Network.hpp>
 #include <map>
 
+#include "server.hpp"
+
 #include "../player.hpp"
 #include "../common.hpp"
 
-class
+class _game
 {
 public:
+    ~_game()
+    {
+        std::map<sf::SocketTCP, player*>::iterator ite;
+        for (ite = players.begin(); ite != players.end(); ite++)
+            delete ite->second;
+    }
+
     void AddPlayer(sf::SocketTCP _socket)
     {
-        //TODO: vapauta muistia...
+    	//TODO: Create player here
         players[_socket] = new player(_socket, players.size() + 1 ,0, 0, 4);
 
         sf::Packet packet;
-        packet << std::string("\tT" + to_string(players.size()));
+        packet << std::string("T" + to_string(players.size()));
+		std::cout << players[_socket]->getId() << " <<< " << std::string("T" + to_string(players.size()));
         _socket.Send(packet);
 
-
-        if (players.size() >= minPlayersInGame)
+        if (players.size() == minPlayersInGame)
         {
-            changeTurn();
-
-            packet.Clear();
-            packet << "\tT1";
-            sendToAll(packet);
-            packet.Clear();
-            packet << "Peli alkaa!";
-            sendToAll(packet);
+            this->turn = 1;
+            sendToAll("T1");
+            sendToAll("MPeli alkaa!");
         }
 
         //TODO: mitä pitää kertoo muista pelaajista
@@ -40,54 +44,73 @@ public:
         return players[_socket];
     }
 
+    int playersCount()
+    {
+        return this->players.size();
+    }
+
     //void changeTurn(int _turn) { this->turn = 1 + (_turn % players.size()); }
     void changeTurn()
     {
         if (++turn > players.size())
             turn = 1;
 
-        sf::Packet newTurn;
-        newTurn << "\tT" + to_string(turn);
-        sendToAll(newTurn);
+        sendToAll(std::string("T" + to_string(turn)));
     }
 
-    int getTurnNumber() { return turn; }
+    unsigned getTurnNumber() { return turn; }
 
     void sendToAll(const std::string& string)
     {
         sf::Packet packet;
         packet << string;
         sendToAll(packet);
+		std::cout << "A <<< " << string << std::endl;
     }
     void sendToAll(sf::Packet packet)
     {
         std::map<sf::SocketTCP, player*>::iterator ite;
         for (ite = players.begin(); ite != players.end(); ite++) {
             ite->second->getSocket().Send(packet);
+
+            DEBUG("lähetetään paketti")
         }
     }
 
+
+    void sendToAllExceptOne(unsigned id, const std::string& message)
+    {
+        sf::Packet packet;
+        packet << message;
+
+        sendToAllExceptOne(id, packet);
+    }
+
+    void sendToAllExceptOne(unsigned id, sf::Packet message)
+    {
+        std::map<sf::SocketTCP, player*>::iterator ite;
+        for (ite = players.begin(); ite != players.end(); ite++) {
+           if (ite->second->getId() == id) {
+                continue;
+            }
+            ite->second->getSocket().Send(message);
+        }
+    }
+
+
+
+
     void pingToAllExceptTheChosenONEWhoIsOnHERPromissedTURN()
     {
-        std::string ping("\tP" + to_string(rand()));
-        std::string responce;
-        sf::Packet pingPacket, pingResponce;
-        pingPacket << ping;
-
         std::map<sf::SocketTCP, player*>::iterator ite;
         for (ite = players.begin(); ite != players.end(); ite++) {
             if (ite->second->getId() == turn)
                 continue;
 
-            ite->second->getSocket().Send(pingPacket);
-            ite->second->getSocket().Receive(pingResponce);
-            pingResponce >> responce;
-
-            if (responce.compare(ping))
+            if (server.ping(ite->second->getSocket()))
             {
-                std::cout << "EI vASTATA MUN PINGGIIIIN!! >: " << std::endl;
-                int NYT_SUUTUIN = 256;
-                exit(NYT_SUUTUIN);
+                std::cout << "  --- EI vASTATA MUN PINGGIIIIN PRKLLL!! >: " << std::endl;
+                exit(135);
             }
         }
     }

@@ -3,21 +3,34 @@
 
 #include <SFML/Network.hpp>
 
-class {
+class _server {
 public:
+    ~_server()
+    {
+        listener.Close();
+    }
+
     bool ping(sf::SocketTCP socket)
     {
         sf::Packet packet;
-        std::string ping = "\tT" + to_string(rand());
+        std::string ping = "P" + to_string(rand());
 
+		std::cout << "  <<< " << ping 	<< std::endl;
+
+        packet << ping;
         socket.Send(packet);
         packet.Clear();
         socket.Receive(packet);
 
         std::string result;
         packet >> result;
-        return !result.compare(ping);
+
+		std::cout << "  >>> " << result << std::endl;
+
+        return result.compare(ping);
     }
+
+
 
 
     sf::SelectorTCP selector;

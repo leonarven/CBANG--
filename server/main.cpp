@@ -1,6 +1,6 @@
 #include <iostream>
 #include <time.h>
-#include <list>
+#include <string.h>
 
 #include <SFML/Network.hpp>
 
@@ -15,7 +15,7 @@ void ServerLoop(unsigned short Port)
     if (!server.listener.Listen(Port))
         return;
 
-    std::cout << "Listening to port " << Port << ", waiting for connections..." << std::endl;
+    std::cout << "  --- Listening to port " << Port << ", waiting for connections..." << std::endl;
 
     server.selector.Add(server.listener);
 
@@ -28,7 +28,8 @@ void ServerLoop(unsigned short Port)
         // We can read from each returned socket
         for (unsigned int i = 0; i < sockets; ++i)
         {
-            // Get the current socket
+            // Get the current socke
+
             sf::SocketTCP Socket = server.selector.GetSocketReady(i);
 
             if (Socket == server.listener)
@@ -38,16 +39,20 @@ void ServerLoop(unsigned short Port)
                 sf::SocketTCP Client;
 
                 server.listener.Accept(Client, &Address);
-                std::cout << "Client connected ! (" << Address << ")" << std::endl;
 
                 sf::Packet welcome;
                 welcome << std::string("Welcome to BANG! server");
                 Client.Send(welcome);
 
-                // Ping failed
-                if (server.ping(Client))
-                    continue; // Don't accept client
+				std::cout << "A <<< Welcome to BANG! server" << std::endl;
+                std::cout << "  --- Client connected ! (" << Address << ")" << std::endl;
 
+
+
+                // Ping failed
+				if (server.ping(Client)){
+                    continue; // Don't accept client
+                }
                 // Add player to game
                 server.selector.Add(Client);
                 Game.AddPlayer(Client);
@@ -55,46 +60,55 @@ void ServerLoop(unsigned short Port)
             }
             else
             {
-                // Else, it is a client socket so we can read the data he sent
                 sf::Packet Packet;
+                // Else, it is a client socket so we can read the data he sent
+                DEBUG("Socket.receive")
                 if (Socket.Receive(Packet) == sf::Socket::Done)
                 {
 
                     player* sender = Game.getPlayer(Socket);
 
-                    std::cout << "id:" << sender->getId() << "/vuoro:" << Game.getTurnNumber() << std::endl;
+                    if (sender->getId() != Game.getTurnNumber()){
+						break;
+                    }
 
-                    if (sender->getId() != Game.getTurnNumber())
-                        break;
-
-                    // Extract the message and display it
                     std::string Message;
                     Packet >> Message;
 
-                    if (Message == "skipidiskoo")
-                        Game.changeTurn();
-                    else if (!Message.compare("shutdown"))
-                    {
-                        Game.sendToAll(Packet);
-                        return;
-                    } else if (Message[0]=='\t') {
-                        msg message = Engine.Parse((char *)Message.c_str());
-                    }
-                    else
-                    {
-                        std::cout << "From: " << sender->getId() << ": \"" << Message << "\"" << std::endl;
-                        Game.sendToAll(Packet);
-                    }
+                    std::cout << sender->getId() << " >>> " << Message << std::endl;
 
+                    msg message = Engine.Parse((char *)Message.c_str());
+                    switch (message.type)
+                    {
+                    case ACTION:
+
+                        break;
+
+                    case DIE:
+                    	return; //FIXME
+                        break;
+
+                    case TEXT:
+                        Game.sendToAll(Packet);
+                        break;
+
+                    case ENDTURN:
+                        Game.changeTurn();
+                        break;
+
+                    case SHUTDOWN:
+                        return;
+
+                    default:
+                        std::cout << "  --- Missä huijasit?" << std::endl;
+                    }
 
                 }
                 else
                 {
                     // Error : we'd better remove the socket from the selector
                     server.selector.Remove(Socket);
-
-
-                    std::cout << "Error receiving data, removing socet from selector";
+                    std::cout << "  --- Error receiving data, removing socet from selector";
                 }
             }
         }
@@ -107,8 +121,9 @@ void ServerLoop(unsigned short Port)
 /// Entry point of application
 /// \return Application exit code
 ////////////////////////////////////////////////////////////
-int main()
+int main(int argc, char** argv)
 {
+    if (argc == 2) minPlayersInGame = atoi(argv[1]);
 
     srand(time(NULL));
 
