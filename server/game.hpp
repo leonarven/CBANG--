@@ -25,15 +25,16 @@ public:
         players[_socket] = new player(_socket, players.size() + 1 ,0, 0, 4);
 
         sf::Packet packet;
-        packet << std::string("T" + to_string(players.size()));
-		std::cout << players[_socket]->getId() << " <<< " << std::string("T" + to_string(players.size()));
+        tmp = std::string("T0" + players.size());
+        packet << tmp;
+		std::cout << players[_socket]->getId() << " <<< " << std::string("T0" + players.size());
         _socket.Send(packet);
 
         if (players.size() == minPlayersInGame)
         {
             this->turn = 1;
-            sendToAll("T1");
-            sendToAll("MPeli alkaa!");
+            sendToAll("M09Peli alkaa!");
+            sendToAll("T01");
         }
 
         //TODO: mitä pitää kertoo muista pelaajista
@@ -55,7 +56,7 @@ public:
         if (++turn > players.size())
             turn = 1;
 
-        sendToAll(std::string("T" + to_string(turn)));
+        sendToAll(std::string("T0") + (char)(48+turn));
     }
 
     unsigned getTurnNumber() { return turn; }
@@ -120,6 +121,7 @@ public:
 private:
     std::map<sf::SocketTCP, player*> players;
 
+	std::string tmp;
     unsigned turn;
 
 } Game;
