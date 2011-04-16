@@ -59,7 +59,7 @@ void ServerLoop(unsigned short Port)
                 Client.Receive(package);
                 package >> ping2;
 
-                /*   */
+                std::cout << ping << std::endl << ping2 << std::endl;
 
                 // Ping failed
                 if (ping != ping2)
@@ -69,11 +69,11 @@ void ServerLoop(unsigned short Port)
                     exit(1234);
                 }
 
-                //TODO: mitä pitää kertoo
-
-                // Add it to the selector
+                // Add player to game
                 server.selector.Add(Client);
-                server.clients.push_back(Client);
+                Game.AddPlayer(Client);
+
+                //TODO: mitä pitää kertoo \tT5
 
                 sf::Packet welcome;
                 welcome << std::string("Welcome to BANG! server");
@@ -85,24 +85,21 @@ void ServerLoop(unsigned short Port)
                 sf::Packet Packet;
                 if (Socket.Receive(Packet) == sf::Socket::Done)
                 {
+
+                    player* sender = Game.getPlayer(Socket);
+
                     // Extract the message and display it
                     std::string Message;
                     Packet >> Message;
 
-
-
-                    std::cout << "A client says : \"" << Message << "\"" << std::endl;
+                    std::cout << "From: " << sender->getId() << ": \"" << Message << "\"" << std::endl;
 
                     msg message = Engine.Parse((char *)Message.c_str());
 
-                    std::list<sf::SocketTCP>::iterator ite;
+                    Game.sendToAll(Packet);
 
-                    for (ite = server.clients.begin(); ite != server.clients.end(); ite++) {
-                        if (ite->Send(Packet) != sf::Socket::Done) {
-                            std::cout << "Couldn't send data to client" << std::endl;
-                            server.selector.Remove(*ite);
-                        }
-                    }
+
+
 
                 }
                 else

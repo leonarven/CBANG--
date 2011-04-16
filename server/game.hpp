@@ -1,12 +1,47 @@
 #ifndef GAME_HPP_INCLUDED
 #define GAME_HPP_INCLUDED
 
+#include <SFML/Network.hpp>
+#include <map>
+
 #include "../player.hpp"
+#include "../common.hpp"
 
 class
 {
 public:
-    std::vector<player> players;
+    void AddPlayer(sf::SocketTCP _socket)
+    {
+        //TODO: vapauta muistia...
+        players[_socket] = new player(_socket, players.size() + 1 ,0, 0, 4);
+
+        sf::Packet packet;
+        packet << std::string("\tT" + to_string(players.size()));
+        _socket.Send(packet);
+
+
+
+        //TODO: mitä pitää kertoo muista pelaajista
+    }
+
+    player* getPlayer(sf::SocketTCP _socket)
+    {
+        return players[_socket];
+    }
+
+    void sendToAll(sf::Packet packet)
+    {
+        std::map<sf::SocketTCP, player*>::iterator ite;
+        for (ite = players.begin(); ite != players.end(); ite++) {
+            ite->second->getSocket().Send(packet);
+        }
+    }
+
+
+private:
+    std::map<sf::SocketTCP, player*> players;
+
+
 } Game;
 
 #endif // GAME_HPP_INCLUDED
