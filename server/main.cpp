@@ -48,7 +48,7 @@ void ServerLoop(unsigned short Port)
 
                 // Send ping to client
                 sf::Packet package;
-                std::string ping("\tping " + to_string(rand()));
+                std::string ping("\tP" + to_string(rand()));
                 std::string ping2;
 
                 package << ping;
@@ -78,6 +78,8 @@ void ServerLoop(unsigned short Port)
                 sf::Packet welcome;
                 welcome << std::string("Welcome to BANG! server");
                 Client.Send(welcome);
+
+                Game.resetGame();
             }
             else
             {
@@ -88,9 +90,17 @@ void ServerLoop(unsigned short Port)
 
                     player* sender = Game.getPlayer(Socket);
 
+                    std::cout << "id:" << sender->getId() << "/vuoro:" << Game.getTurnNumber() << std::endl;
+
+                    if (sender->getId() != Game.getTurnNumber())
+                        break;
+
                     // Extract the message and display it
                     std::string Message;
                     Packet >> Message;
+
+                    if (Message != "skip")
+                        Game.changeTurn();
 
                     std::cout << "From: " << sender->getId() << ": \"" << Message << "\"" << std::endl;
 

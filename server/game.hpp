@@ -24,10 +24,24 @@ public:
         //TODO: mitä pitää kertoo muista pelaajista
     }
 
+    void resetGame()
+    {
+        turn = 1;
+    }
+
     player* getPlayer(sf::SocketTCP _socket)
     {
         return players[_socket];
     }
+
+    void changeTurn()
+    {
+        if (++turn > players.size())
+            turn = 1;
+
+    }
+
+    int getTurnNumber() { return turn; }
 
     void sendToAll(sf::Packet packet)
     {
@@ -41,6 +55,7 @@ public:
 private:
     std::map<sf::SocketTCP, player*> players;
 
+    unsigned turn;
 
 } Game;
 
