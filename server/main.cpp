@@ -89,7 +89,7 @@ void ServerLoop(unsigned short Port)
                         break;
 
                     case TEXT:
-                        Game.sendToAll(Packet);
+                        Game.sendToAllExceptOne(sender->getId(), Packet);
                         break;
 
                     case ENDTURN:
@@ -108,7 +108,7 @@ void ServerLoop(unsigned short Port)
                 {
                     // Error : we'd better remove the socket from the selector
                     server.selector.Remove(Socket);
-                    std::cout << "  --- Error receiving data, removing socet from selector";
+                    std::cout << "  --- Error receiving data, removing socet from selector" << std::endl;
                 }
             }
         }
