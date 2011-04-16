@@ -7,10 +7,9 @@ class card {
 public:
     card (CARDS _card)
     {
-
+		this->type = _card;
     }
-
-
+	CARDS type;
 };
 
 #endif // CARD_HPP_INCLUDED
