@@ -22,11 +22,10 @@
 class _Engine
 {
 public:
-	msg Parse(std::string buf) { return this->Parse((char*)buf.c_str()); }
-	msg Parse(char* buf)
+	msg Parse(std::string buf)
 	{
 		msg message;
-		message.buf = buf;
+		message.buf = (char *)buf.c_str();
 		message.type = (MSG_TYPE)buf[0];
 
 		DEBUG((int)buf[1])
@@ -36,10 +35,10 @@ public:
 		message.target = buf[2] - 48;
 
 		DEBUG(buf)
-		DEBUG(strlen(buf))
+		DEBUG(buf.length())
 
-		if (strlen(buf) >= 4)
-			message.data = std::string(buf).substr(3);
+		if (buf.length() >= 4)
+			message.data = buf.substr(3);
 
 
         return message;

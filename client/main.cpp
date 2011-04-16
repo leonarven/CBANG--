@@ -44,14 +44,19 @@ int main (int argc, char **argv) {
 
 	bool Connected = true;
 
+	packetReceive.Clear();
+	packetSend.Clear();
     cout << "Yhdistetty serverille " << server.addr << endl;
 	string str;
 	if (server.socket.Receive(packetReceive) != sf::Socket::Done)
 		Connected = false;
 	packetReceive >> str;
+	OUTPUT("WELCOME", str);
 	cout << "< Message: \"" <<  str<< "\"" << endl;
 
 	/* PING */
+	packetReceive.Clear();
+	packetSend.Clear();
 	if (server.socket.Receive(packetReceive) != sf::Socket::Done)
 		Connected = false;
 	packetReceive >> str;
@@ -64,10 +69,14 @@ int main (int argc, char **argv) {
 	msg tmp;
 
 	// Get Id
+	packetReceive.Clear();
+	packetSend.Clear();
 	if (server.socket.Receive(packetReceive) != sf::Socket::Done)
 		Connected = false;
 	packetReceive >> str;
+	DEBUG(str);
 	tmp = Engine.Parse(str);
+	DEBUG(tmp.target);
 	myId = (int)tmp.target;
 	cout << "< Id:      \"" << myId << "\"" << endl;
 
@@ -114,7 +123,6 @@ int main (int argc, char **argv) {
 				packetSend.Clear();
 				packetSend << str;
 				server.socket.Send(packetSend);
-				packetSend.Clear();
 				break;
 			case TEXT:
 				if (tmp.sender != myId)

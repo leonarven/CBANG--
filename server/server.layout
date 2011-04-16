@@ -4,19 +4,19 @@
 	<File name="../card.hpp" open="1" top="0" tabpos="3">
 		<Cursor position="0" topLine="0" />
 	</File>
-	<File name="../common.hpp" open="1" top="0" tabpos="4">
-		<Cursor position="444" topLine="12" />
+	<File name="../common.hpp" open="1" top="1" tabpos="4">
+		<Cursor position="426" topLine="0" />
 	</File>
 	<File name="../engine.hpp" open="1" top="0" tabpos="5">
-		<Cursor position="0" topLine="3" />
+		<Cursor position="555" topLine="9" />
 	</File>
 	<File name="../player.hpp" open="1" top="0" tabpos="6">
 		<Cursor position="158" topLine="16" />
 	</File>
 	<File name="game.hpp" open="1" top="0" tabpos="2">
-		<Cursor position="0" topLine="0" />
+		<Cursor position="655" topLine="12" />
 	</File>
-	<File name="main.cpp" open="1" top="1" tabpos="1">
-		<Cursor position="2227" topLine="64" />
+	<File name="main.cpp" open="1" top="0" tabpos="1">
+		<Cursor position="855" topLine="18" />
 	</File>
 </CodeBlocks_layout_file>

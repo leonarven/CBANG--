@@ -34,6 +34,7 @@ void ServerLoop(unsigned short Port)
 
             if (Socket == server.listener)
             {
+
                 // If the listening socket is ready, it means that we can accept a new connection
                 sf::IPAddress Address;
                 sf::SocketTCP Client;
@@ -43,6 +44,7 @@ void ServerLoop(unsigned short Port)
                 sf::Packet welcome;
                 welcome << std::string("M09Welcome to BANG! server");
                 Client.Send(welcome);
+				INPUT("WELCOME", welcome.GetData());
 
 				std::cout << "A <<< Welcome to BANG! server" << std::endl;
                 std::cout << "  --- Client connected ! (" << Address << ")" << std::endl;

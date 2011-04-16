@@ -27,6 +27,7 @@ public:
         sf::Packet packet;
         tmp = std::string("T0" + (char)(48+players.size()));
         packet << tmp;
+		DEBUG(tmp);
 		std::cout << players[_socket]->getId() << " <<< " << std::string("T0" + (char)(48+players.size()));
         _socket.Send(packet);
 
