@@ -9,6 +9,8 @@
 
 #define DEBUG(str) std::cout << "\aDEBUG, " << __LINE__ << ": [" << str << "]" << std::endl;
 
+unsigned minPlayersInGame = 3;
+
 template <class T>
 inline std::string to_string (const T& t)
 {
