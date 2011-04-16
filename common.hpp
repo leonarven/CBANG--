@@ -32,14 +32,14 @@ enum CARDS {
 };
 
 enum MSG_TYPE {		//Toimintamerkit:
-	TEXT,			//	M
-	ACTION,			//	A
-	DIE,			//	D
-	SHUTDOWN,		//	S
-	ENDTURN,		//	E
-	TURN,			//	T
-	PING,			//	P
-	CARD			//	C
+	TEXT		= 'M',
+	ACTION		= 'A',
+	DIE			= 'D',
+	SHUTDOWN	= 'S',
+	ENDTURN		= 'E',
+	TURN		= 'T',
+	PING		= 'P',
+	CARD		= 'C'
 };
 
 struct msg {
