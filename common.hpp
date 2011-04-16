@@ -33,6 +33,7 @@ enum CARDS {
 
 enum MSG_TYPE {		//Toimintamerkit:
 	TEXT		= 'M',
+	MESSAGE		= 'M',
 	ACTION		= 'A',
 	DIE			= 'D',
 	SHUTDOWN	= 'S',

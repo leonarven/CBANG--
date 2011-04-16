@@ -62,35 +62,48 @@ int main (int argc, char **argv) {
 	cout << myId << ": < \"" << str << "\"" << endl;
 
 	while (Connected) {
+		DEBUG("")
+		packetSend.Clear();
+		packetReceive.Clear();
 		if (turn == myId) {
 			cout << myId << ": > ";
-			packetSend.Clear();
 			std::getline(std::cin, str);
+		DEBUG(str)
 			packetSend << str;
-			Connected = (server.socket.Send(packetSend) == sf::Socket::Done && str.compare("shutdown"));
+			if (!str.compare("shutdown")) {
+				str = string("S");
+				Connected = false;
+		DEBUG(str)
+			} else {
+				Connected = (server.socket.Send(packetSend) == sf::Socket::Done);
+		DEBUG(str)
+			}
 		}
+
         server.socket.Receive(packetReceive);
         packetReceive >> str;
         tmp = Engine.Parse(str);
+		DEBUG(str)
 
-
-        if (!str.compare("shutdown")) {
-			Connected = false;
-        } else if (tmp.buf[0]=='\t') {
-			if (tmp.buf[1]=='T') {
-				turn = tmp.options.at(0)-(int)'0';
-			} else if (tmp.buf[1]=='P') {
+		DEBUG(tmp.type)
+		DEBUG(tmp.options)
+        cout << myId << ": < \"" << str<< "\"" << endl;
+		switch(tmp.type) {
+			case SHUTDOWN:
+				Connected = false;
+				break;
+			case TURN:
+				turn = atoi(tmp.options.c_str());
+				DEBUG(string("Vuoro vaihtui; " + turn));
+				break;
+			case PING:
 				packetSend.Clear();
 				packetSend << str;
 				server.socket.Send(packetSend);
 				packetSend.Clear();
-			}
-        }
-
-
-
-
-        cout << myId << ": < \"" << str<< "\"" << endl;
+				break;
+		}
+		DEBUG(str)
 	}
 	cout << "Sammutetaan client" << endl;
     server.socket.Close();

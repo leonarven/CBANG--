@@ -33,3 +33,29 @@
 1302904969 /home/sante/Projects/BANG-/common.hpp
 	<vector>
 
+1302933521 source:/media/Windows/Users/leonarven/Ohjelmointi/C++/BANG-/client/main.cpp
+	<SFML/Network.hpp>
+	<iostream>
+	<string>
+	"../common.hpp"
+	"../engine.hpp"
+	"../player.hpp"
+
+1302940099 /media/Windows/Users/leonarven/Ohjelmointi/C++/BANG-/common.hpp
+	<vector>
+	<sstream>
+
+1302933500 /media/Windows/Users/leonarven/Ohjelmointi/C++/BANG-/engine.hpp
+	<vector>
+	<cstdlib>
+	<cstring>
+	"common.hpp"
+
+1302928707 /media/Windows/Users/leonarven/Ohjelmointi/C++/BANG-/player.hpp
+	"common.hpp"
+	"card.hpp"
+	<SFML/Network.hpp>
+
+1302916377 /media/Windows/Users/leonarven/Ohjelmointi/C++/BANG-/card.hpp
+	"common.hpp"
+
