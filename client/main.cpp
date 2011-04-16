@@ -36,16 +36,21 @@ int main (int argc, char **argv) {
 		return ERRNO_CANT_CONNECT;
 
     cout << "Yhdistetty serverille " << server.addr << endl;
-
+	string str;
+	server.socket.Receive(packetReceive);
+	packetReceive >> str;
+	packetSend << str;
+	cout << "< \"" <<  str<< "\"" << endl;
+	bool Connected = (server.socket.Send(packetSend) == sf::Socket::Done);
 	packetReceive.Clear();
 	server.socket.Receive(packetReceive);
 	string tmp;
 	packetReceive >> tmp;
-	cout << "\"" << tmp << "\"" << endl;
+	cout << "< \"" << tmp << "\"" << endl;
 
-	bool Connected = true;
 	while (Connected) {
 		packetSend.Clear();
+		cout << "> ";
         std::getline(std::cin, str);
         packetSend << str;
         Connected = (server.socket.Send(packetSend) == sf::Socket::Done && str.compare("shutdown"));
@@ -54,7 +59,7 @@ int main (int argc, char **argv) {
         server.socket.Receive(packetReceive);
         string tmp;
         packetReceive >> tmp;
-        cout << "\"" << tmp << "\"" << endl;
+        cout << "< \"" << tmp << "\"" << endl;
 	}
 	cout << "Sammutetaan client" << endl;
     server.socket.Close();
