@@ -5,6 +5,11 @@
 // Copyright (c) 2011 Miro Nieminen (leonarven@gmail.com) ja sante ^^
 //
 
+//PROTOCOL:
+//sender
+//destination
+//data = string
+
 #ifndef GAME_HPP
 #define GAME_HPP
 
@@ -23,10 +28,11 @@ public:
 		message.buf = buf;
 		message.type = (MSG_TYPE)buf[0];
 
-		for (unsigned int i = 1; i < strlen(buf); i++)
-		{
-			message.options.push_back(buf[i]);
-		}
+		message.sender = (short)buf[1];
+		message.target = (short)buf[2];
+
+		message.data = std::string(buf).substr(3);
+
         return message;
     }
 

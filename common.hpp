@@ -48,7 +48,7 @@ struct msg { // Parsitut viestit muotoa typesendertargetoptions[....]
 	MSG_TYPE	type;
 	short		sender, target;
 	char*		buf;
-	std::string	options;
+	std::string	data;
 };
 
 #endif

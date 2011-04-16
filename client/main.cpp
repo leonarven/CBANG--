@@ -1,6 +1,8 @@
 #include <SFML/Network.hpp>
+
 #include <iostream>
 #include <string>
+
 #include "../common.hpp"
 #include "../engine.hpp"
 #include "../player.hpp"
@@ -13,10 +15,11 @@ class _server {
 	sf::IPAddress addr;
 } server;
 
+/*
 struct _buf {
 	std::size_t size;
 	char data[BUFFER_SIZE];
-} buf;
+} buf;*/
 
 sf::Packet packetSend, packetReceive;
 
@@ -39,62 +42,71 @@ int main (int argc, char **argv) {
     if (server.socket.Connect(PORT, server.addr) != sf::Socket::Done)
 		return ERRNO_CANT_CONNECT;
 
+	bool Connected = true;
+
     cout << "Yhdistetty serverille " << server.addr << endl;
 	string str;
-	server.socket.Receive(packetReceive);
+	if (server.socket.Receive(packetReceive) != sf::Socket::Done)
+		Connected = false;
 	packetReceive >> str;
-	cout << "< \"" <<  str<< "\"" << endl;
+	cout << "< Message: \"" <<  str<< "\"" << endl;
+
 	/* PING */
-	server.socket.Receive(packetReceive);
+	if (server.socket.Receive(packetReceive) != sf::Socket::Done)
+		Connected = false;
 	packetReceive >> str;
-	cout << "< \"" <<  str<< "\"" << endl;
+	cout << "< Ping:    \"" <<  str<< "\"" << endl;
 	packetSend << str;
-	cout << "> \"" <<  str<< "\"" << endl;
-	bool Connected = (server.socket.Send(packetSend) == sf::Socket::Done);
+	if (server.socket.Send(packetSend) != sf::Socket::Done)
+		Connected = false;
 	/* /PING */
 
 	msg tmp;
 
-	server.socket.Receive(packetReceive);
+	// Get Id
+	if (server.socket.Receive(packetReceive) != sf::Socket::Done)
+		Connected = false;
 	packetReceive >> str;
 	tmp = Engine.Parse(str);
-	myId = tmp.options.at(0)-(int)'0';
-	cout << myId << ": < \"" << str << "\"" << endl;
+	myId = tmp.target;
+	cout << "< Id:      \"" << myId << "\"" << endl;
 
 	while (Connected) {
-		DEBUG("")
+
 		packetSend.Clear();
 		packetReceive.Clear();
+
 		if (turn == myId) {
 			cout << myId << ": > ";
 			std::getline(std::cin, str);
-		DEBUG(str)
+
 			packetSend << str;
 			if (!str.compare("shutdown")) {
 				str = string("S");
 				Connected = false;
-		DEBUG(str)
 			} else {
 				Connected = (server.socket.Send(packetSend) == sf::Socket::Done);
-		DEBUG(str)
 			}
 		}
 
+		// wait for instructions from the server
         server.socket.Receive(packetReceive);
         packetReceive >> str;
-        tmp = Engine.Parse(str);
-		DEBUG(str)
 
-		DEBUG(tmp.type)
-		DEBUG(tmp.options)
-        cout << myId << ": < \"" << str<< "\"" << endl;
+		// Server sent empty line -> ignore it
+        if (str.empty())
+			continue;
+
+        tmp = Engine.Parse(str);
+
+        //cout << myId << ": < \"" << str<< "\"" << endl;
 		switch(tmp.type) {
 			case SHUTDOWN:
 				Connected = false;
 				break;
 			case TURN:
-				turn = atoi(tmp.options.c_str());
-				DEBUG(string("Vuoro vaihtui; " + turn));
+				turn = atoi(tmp.data.c_str());
+				std::cout << "Vuoro vaihtui: " << turn << std::endl;
 				break;
 			case PING:
 				packetSend.Clear();
@@ -102,8 +114,12 @@ int main (int argc, char **argv) {
 				server.socket.Send(packetSend);
 				packetSend.Clear();
 				break;
+			case TEXT:
+				if (tmp.sender != myId)
+					std::cout << "< " << tmp.data << std::endl;
+			default:
+				std::cout << "Ominaisuus ei ole vielä valmis! ^^" << std::endl;
 		}
-		DEBUG(str)
 	}
 	cout << "Sammutetaan client" << endl;
     server.socket.Close();
