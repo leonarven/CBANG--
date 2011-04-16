@@ -9,8 +9,8 @@
 class player
 {
     public:
-    player(sf::SocketTCP _socket, int id, int _role, int _character, int _mHealth) :
-        role(_role), character(_character), mHealth(_mHealth), health(_mHealth), socket(_socket)
+    player(sf::SocketTCP _socket, int id_, int _role, int _character, int _mHealth) :
+        socket(_socket), id(id_), role(_role), character(_character), mHealth(_mHealth), health(_mHealth)
     {
         for (int i = 0; i < _mHealth; i++)
         {
@@ -19,7 +19,7 @@ class player
     }
 
     sf::SocketTCP getSocket()   { return this->socket; }
-    int     getId()             { return this->id; }
+    unsigned getId()             { return this->id; }
     int		getHealt()		    { return this->health; }
     int		getMHealt()		    { return this->mHealth; }
     int		getRole()		    { return this->role; }
@@ -40,12 +40,12 @@ class player
 private:
 
     sf::SocketTCP socket;
-    int id;
+    unsigned id;
 
     std::vector<card>	table;
     std::vector<card>	hand;
     std::vector<card*>	cards;
-    int role, character, mHealth;
+    const int role, character, mHealth;
     int health;
 };
 

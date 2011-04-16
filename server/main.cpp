@@ -44,26 +44,9 @@ void ServerLoop(unsigned short Port)
                 welcome << std::string("Welcome to BANG! server");
                 Client.Send(welcome);
 
-                // Send ping to client
-                sf::Packet package;
-                std::string ping("\tP" + to_string(rand()));
-                std::string ping2;
-
-                package << ping;
-                Client.Send(package);
-
-                package.Clear();
-
-                Client.Receive(package);
-                package >> ping2;
-
                 // Ping failed
-                if (ping != ping2)
-                {
-                    //DEBUG:
-                    std::cout << "trololoo" << std::endl;
-                    exit(1234);
-                }
+                if (server.ping(Client))
+                    continue; // Don't accept client
 
                 // Add player to game
                 server.selector.Add(Client);

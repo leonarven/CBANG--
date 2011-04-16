@@ -53,7 +53,6 @@ public:
 
     int getTurnNumber() { return turn; }
 
-
     void sendToAll(const std::string& string)
     {
         sf::Packet packet;
