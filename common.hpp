@@ -2,7 +2,8 @@
 #define BANG_COMMON_HPP
 
 #define PORT 6661
-#define BUFFER_SIZE 6661
+#define BUFFER_SIZE 512
+#define VERSION 0.23
 
 #include <vector>
 #include <sstream>
@@ -43,11 +44,11 @@ enum MSG_TYPE {		//Toimintamerkit:
 	CARD		= 'C'
 };
 
-struct msg {
-	MSG_TYPE type;
-	char* buf;
-	char* data;
-	std::string options;
+struct msg { // Parsitut viestit muotoa typesendertargetoptions[....]
+	MSG_TYPE	type;
+	short		sender, target;
+	char*		buf;
+	std::string	options;
 };
 
 #endif
