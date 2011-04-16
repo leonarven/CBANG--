@@ -3,6 +3,7 @@
 #include <string>
 #include "../common.hpp"
 #include "../engine.hpp"
+#include "../player.hpp"
 
 using namespace std;
 
@@ -17,9 +18,12 @@ struct {
 	char data[BUFFER_SIZE];
 } buf;
 
-string str;
 sf::Packet packetSend, packetReceive;
 
+vector<player> players;
+int turn = 0, meId = 0;
+
+string str;
 int main (int argc, char **argv) {
  	if (argc<2) {
 		cout << "Käyttö: client <<Serverin osoite>>!" << endl;
@@ -37,29 +41,30 @@ int main (int argc, char **argv) {
 
     cout << "Yhdistetty serverille " << server.addr << endl;
 	string str;
+	/* PING */
 	server.socket.Receive(packetReceive);
 	packetReceive >> str;
-	packetSend << str;
 	cout << "< \"" <<  str<< "\"" << endl;
+	packetSend << str;
+	cout << "> \"" <<  str<< "\"" << endl;
 	bool Connected = (server.socket.Send(packetSend) == sf::Socket::Done);
-	packetReceive.Clear();
+	/* /PING */
+
 	server.socket.Receive(packetReceive);
-	string tmp;
-	packetReceive >> tmp;
-	cout << "< \"" << tmp << "\"" << endl;
+	packetReceive >> str;
+	cout << "< \"" << str << "\"" << endl;
 
 	while (Connected) {
-		packetSend.Clear();
-		cout << "> ";
-        std::getline(std::cin, str);
-        packetSend << str;
-        Connected = (server.socket.Send(packetSend) == sf::Socket::Done && str.compare("shutdown"));
-
-		packetReceive.Clear();
+		if (turn == meId) {
+			cout << "> ";
+			std::getline(std::cin, str);
+			packetSend << str;
+			Connected = (server.socket.Send(packetSend) == sf::Socket::Done && str.compare("shutdown"));
+		}
         server.socket.Receive(packetReceive);
-        string tmp;
-        packetReceive >> tmp;
-        cout << "< \"" << tmp << "\"" << endl;
+        packetReceive >> str;
+        Engine.Parse(str);
+        cout << "< \"" << str<< "\"" << endl;
 	}
 	cout << "Sammutetaan client" << endl;
     server.socket.Close();

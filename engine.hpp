@@ -16,6 +16,7 @@
 class
 {
 public:
+    msg Parse(std::string buf) { return this->Parse((char*)buf.c_str()); }
     msg Parse(char* buf)
     {
         msg message;
