@@ -37,7 +37,7 @@ public:
 		DEBUG(buf)
 		DEBUG(strlen(buf))
 
-		if (strlen(buf) <= 3)
+		if (strlen(buf) >= 4)
 			message.data = std::string(buf).substr(3);
 
 

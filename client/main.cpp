@@ -68,7 +68,7 @@ int main (int argc, char **argv) {
 		Connected = false;
 	packetReceive >> str;
 	tmp = Engine.Parse(str);
-	myId = tmp.target;
+	myId = (int)tmp.target;
 	cout << "< Id:      \"" << myId << "\"" << endl;
 
 	while (Connected) {
@@ -79,10 +79,12 @@ int main (int argc, char **argv) {
 		if (turn == myId) {
 			cout << myId << ": > ";
 			std::getline(std::cin, str);
+			str = string("M")+(char)(48+myId)+'9'+str;
 
 			packetSend << str;
 			if (!str.compare("shutdown")) {
-				str = string("S");
+
+				str = 'S';
 				Connected = false;
 			} else {
 				Connected = (server.socket.Send(packetSend) == sf::Socket::Done);
@@ -105,7 +107,7 @@ int main (int argc, char **argv) {
 				Connected = false;
 				break;
 			case TURN:
-				turn = atoi(tmp.data.c_str());
+				turn = tmp.target;
 				std::cout << "Vuoro vaihtui: " << turn << std::endl;
 				break;
 			case PING:
