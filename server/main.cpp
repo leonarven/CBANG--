@@ -7,13 +7,7 @@
 #include "../engine.hpp"
 #include "../common.hpp"
 #include "game.hpp"
-
-class {
-public:
-    sf::SelectorTCP selector;
-    sf::SocketTCP listener;
-
-} server;
+#include "server.hpp"
 
 void ServerLoop(unsigned short Port)
 {
@@ -46,6 +40,10 @@ void ServerLoop(unsigned short Port)
                 server.listener.Accept(Client, &Address);
                 std::cout << "Client connected ! (" << Address << ")" << std::endl;
 
+                sf::Packet welcome;
+                welcome << std::string("Welcome to BANG! server");
+                Client.Send(welcome);
+
                 // Send ping to client
                 sf::Packet package;
                 std::string ping("\tP" + to_string(rand()));
@@ -59,8 +57,6 @@ void ServerLoop(unsigned short Port)
                 Client.Receive(package);
                 package >> ping2;
 
-                std::cout << ping << std::endl << ping2 << std::endl;
-
                 // Ping failed
                 if (ping != ping2)
                 {
@@ -73,13 +69,6 @@ void ServerLoop(unsigned short Port)
                 server.selector.Add(Client);
                 Game.AddPlayer(Client);
 
-                //TODO: mitä pitää kertoo \tT5
-
-                sf::Packet welcome;
-                welcome << std::string("Welcome to BANG! server");
-                Client.Send(welcome);
-
-                Game.resetGame();
             }
             else
             {
@@ -99,16 +88,20 @@ void ServerLoop(unsigned short Port)
                     std::string Message;
                     Packet >> Message;
 
-                    if (Message != "skip")
+                    if (Message == "skipidiskoo")
                         Game.changeTurn();
-
-                    std::cout << "From: " << sender->getId() << ": \"" << Message << "\"" << std::endl;
-
-                    msg message = Engine.Parse((char *)Message.c_str());
-
-                    Game.sendToAll(Packet);
-
-
+                    else if (!Message.compare("shutdown"))
+                    {
+                        Game.sendToAll(Packet);
+                        return;
+                    } else if (Message[0]=='\t') {
+                        msg message = Engine.Parse((char *)Message.c_str());
+                    }
+                    else
+                    {
+                        std::cout << "From: " << sender->getId() << ": \"" << Message << "\"" << std::endl;
+                        Game.sendToAll(Packet);
+                    }
 
 
                 }
@@ -142,7 +135,6 @@ int main()
 
     // Wait until the user presses 'enter' key
     std::cout << "Press enter to exit..." << std::endl;
-    std::cin.ignore(10000, '\n');
     std::cin.ignore(10000, '\n');
 
     return EXIT_SUCCESS;

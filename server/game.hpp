@@ -20,13 +20,19 @@ public:
         _socket.Send(packet);
 
 
+        if (players.size() >= minPlayersInGame)
+        {
+            changeTurn();
+
+            packet.Clear();
+            packet << "\tT1";
+            sendToAll(packet);
+            packet.Clear();
+            packet << "Peli alkaa!";
+            sendToAll(packet);
+        }
 
         //TODO: mitä pitää kertoo muista pelaajista
-    }
-
-    void resetGame()
-    {
-        turn = 1;
     }
 
     player* getPlayer(sf::SocketTCP _socket)
@@ -34,15 +40,26 @@ public:
         return players[_socket];
     }
 
+    //void changeTurn(int _turn) { this->turn = 1 + (_turn % players.size()); }
     void changeTurn()
     {
         if (++turn > players.size())
             turn = 1;
 
+        sf::Packet newTurn;
+        newTurn << "\tT" + to_string(turn);
+        sendToAll(newTurn);
     }
 
     int getTurnNumber() { return turn; }
 
+
+    void sendToAll(const std::string& string)
+    {
+        sf::Packet packet;
+        packet << string;
+        sendToAll(packet);
+    }
     void sendToAll(sf::Packet packet)
     {
         std::map<sf::SocketTCP, player*>::iterator ite;
@@ -50,6 +67,32 @@ public:
             ite->second->getSocket().Send(packet);
         }
     }
+
+    void pingToAllExceptTheChosenONEWhoIsOnHERPromissedTURN()
+    {
+        std::string ping("\tP" + to_string(rand()));
+        std::string responce;
+        sf::Packet pingPacket, pingResponce;
+        pingPacket << ping;
+
+        std::map<sf::SocketTCP, player*>::iterator ite;
+        for (ite = players.begin(); ite != players.end(); ite++) {
+            if (ite->second->getId() == turn)
+                continue;
+
+            ite->second->getSocket().Send(pingPacket);
+            ite->second->getSocket().Receive(pingResponce);
+            pingResponce >> responce;
+
+            if (responce.compare(ping))
+            {
+                std::cout << "EI vASTATA MUN PINGGIIIIN!! >: " << std::endl;
+                int NYT_SUUTUIN = 256;
+                exit(NYT_SUUTUIN);
+            }
+        }
+    }
+
 
 
 private:
