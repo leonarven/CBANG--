@@ -30,6 +30,12 @@ public:
             case 'A':
                 message.type = ACTION;
                 break;
+            case 'T':
+                break;
+            case 'C':
+                break;
+            case 'P':
+                break;
             case 'D':
                 break;
             default:

@@ -21,7 +21,7 @@ struct {
 sf::Packet packetSend, packetReceive;
 
 vector<player> players;
-int turn = 0, meId = 0;
+int turn = 1, myId = 0;
 
 string str;
 int main (int argc, char **argv) {
@@ -50,13 +50,18 @@ int main (int argc, char **argv) {
 	bool Connected = (server.socket.Send(packetSend) == sf::Socket::Done);
 	/* /PING */
 
+	msg tmp;
+
 	server.socket.Receive(packetReceive);
 	packetReceive >> str;
-	cout << "< \"" << str << "\"" << endl;
+	tmp = Engine.Parse(str);
+	myId = tmp.options.at(0)-(int)'0';
+	cout << myId << ": < \"" << str << "\"" << endl;
 
 	while (Connected) {
-		if (turn == meId) {
-			cout << "> ";
+		if (turn == myId) {
+			cout << myId << ": > ";
+			packetSend.Clear();
 			std::getline(std::cin, str);
 			packetSend << str;
 			Connected = (server.socket.Send(packetSend) == sf::Socket::Done && str.compare("shutdown"));
@@ -64,7 +69,7 @@ int main (int argc, char **argv) {
         server.socket.Receive(packetReceive);
         packetReceive >> str;
         Engine.Parse(str);
-        cout << "< \"" << str<< "\"" << endl;
+        cout << myId << ": < \"" << str<< "\"" << endl;
 	}
 	cout << "Sammutetaan client" << endl;
     server.socket.Close();
