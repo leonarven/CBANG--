@@ -2,46 +2,49 @@
 
 #include<SFML/Network.hpp>
 
+#include "../engine.hpp"
 #include "../common.hpp"
+#include "game.hpp"
 
+class {
+public:
+    sf::SelectorTCP selector;
+    sf::SocketTCP listener;
+
+} server;
 
 void ServerLoop(unsigned short Port)
 {
-    // Create a socket for listening to incoming connections
-    sf::SocketTCP listener;
-    if (!listener.Listen(Port))
+    // start listening to incoming connections
+    if (!server.listener.Listen(Port))
         return;
 
     std::cout << "Listening to port " << Port << ", waiting for connections..." << std::endl;
 
-    // Create a selector for handling several sockets (the listener + the socket associated to each client)
-    sf::SelectorTCP Selector;
-
-    // Add the listener
-    Selector.Add(listener);
+    server.selector.Add(server.listener);
 
     // Loop while... we close the program :)
     while (true)
     {
         // Get the sockets ready for reading
-        unsigned int NbSockets = Selector.Wait();
+        unsigned int sockets = server.selector.Wait();
 
         // We can read from each returned socket
-        for (unsigned int i = 0; i < NbSockets; ++i)
+        for (unsigned int i = 0; i < sockets; ++i)
         {
             // Get the current socket
-            sf::SocketTCP Socket = Selector.GetSocketReady(i);
+            sf::SocketTCP Socket = server.selector.GetSocketReady(i);
 
-            if (Socket == listener)
+            if (Socket == server.listener)
             {
                 // If the listening socket is ready, it means that we can accept a new connection
                 sf::IPAddress Address;
                 sf::SocketTCP Client;
-                listener.Accept(Client, &Address);
+                server.listener.Accept(Client, &Address);
                 std::cout << "Client connected ! (" << Address << ")" << std::endl;
 
                 // Add it to the selector
-                Selector.Add(Client);
+                server.selector.Add(Client);
 
                 sf::Packet welcome;
                 welcome << std::string("Welcome to BANG! server");
@@ -56,22 +59,24 @@ void ServerLoop(unsigned short Port)
                     // Extract the message and display it
                     std::string Message;
                     Packet >> Message;
-                    Packet.Clear();
+
                     std::cout << "A client says : \"" << Message << "\"" << std::endl;
 
-
-
-                    Packet << Message;
-
-                    std::cout << "lähetetään: " << Message << std::endl;
+                    msg message = Engine.Parse((char *)Message.c_str());
 
                     if (Socket.Send(Packet) != sf::Socket::Done)
-                        std::cout << "error sending" << std::endl;;
+                    {
+                        std::cout << "Couldn't send data to client" << std::endl;
+                        server.selector.Remove(Socket);
+                    }
+
                 }
                 else
                 {
                     // Error : we'd better remove the socket from the selector
-                    Selector.Remove(Socket);
+                    server.selector.Remove(Socket);
+
+                    std::cout << "Error receiving data, removing socet from selector";
                 }
             }
         }
@@ -79,7 +84,6 @@ void ServerLoop(unsigned short Port)
 }
 
 
-#include "game.hpp"
 
 ////////////////////////////////////////////////////////////
 /// Entry point of application
@@ -87,7 +91,6 @@ void ServerLoop(unsigned short Port)
 ////////////////////////////////////////////////////////////
 int main()
 {
-    msg message = Game.Parse("\tA345");
 
 
 

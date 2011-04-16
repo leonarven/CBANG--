@@ -40,8 +40,11 @@
 			<Add option="-lsfml-network" />
 			<Add option="-lsfml-system" />
 		</Linker>
+		<Unit filename="../card.hpp" />
 		<Unit filename="../common.hpp" />
 		<Unit filename="../engine.hpp" />
+		<Unit filename="../player.hpp" />
+		<Unit filename="game.hpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

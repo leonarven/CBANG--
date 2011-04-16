@@ -50,7 +50,7 @@ public:
 
 
 
-} Game;
+} Engine;
 
 #endif // GAME_HPP
 
