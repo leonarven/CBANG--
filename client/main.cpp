@@ -94,12 +94,12 @@ int main (int argc, char **argv) {
 		// wait for instructions from the server
         server.socket.Receive(packetReceive);
         packetReceive >> str;
+        tmp = Engine.Parse(str);
 
 		// Server sent empty line -> ignore it
         if (str.empty())
 			continue;
 
-        tmp = Engine.Parse(str);
 
         //cout << myId << ": < \"" << str<< "\"" << endl;
 		switch(tmp.type) {

@@ -13,6 +13,7 @@
 #ifndef GAME_HPP
 #define GAME_HPP
 
+#include <SFML/Network.hpp>
 #include <vector>
 #include <cstdlib>
 #include <cstring>
@@ -43,6 +44,16 @@ public:
 
         return message;
     }
+
+/*
+	std::string sImplode(MSG_TYPE, unsigned sender, unsigned target, std::string data)
+	{
+
+    }
+	sf::Packet sImplode(MSG_TYPE, unsigned sender, unsigned target, std::string data)
+	{
+
+    }*/
 
 
 

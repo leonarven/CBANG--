@@ -41,7 +41,7 @@ void ServerLoop(unsigned short Port)
                 server.listener.Accept(Client, &Address);
 
                 sf::Packet welcome;
-                welcome << std::string("M\x00\x09Welcome to BANG! server");
+                welcome << std::string("M09Welcome to BANG! server");
                 Client.Send(welcome);
 
 				std::cout << "A <<< Welcome to BANG! server" << std::endl;

@@ -38,9 +38,11 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="../card.hpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="../common.hpp" />
 		<Unit filename="../engine.hpp" />
+		<Unit filename="../player.hpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
