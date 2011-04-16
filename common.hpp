@@ -7,7 +7,7 @@
 #include <vector>
 #include <sstream>
 
-#define DEBUG(str) std::cout << "\aDEBUG, " << __LINE__ << ": [" << str << "]" << std::endl;
+#define DEBUG(str) std::cout << "\aDEBUG, " << __LINE__ << ": [" << str << "]" << __FILE__ << std::endl;
 
 unsigned minPlayersInGame = 3;
 
