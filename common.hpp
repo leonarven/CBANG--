@@ -31,20 +31,22 @@ enum CARDS {
 
 };
 
-enum ACTION {
-	NONE,
-	BANG
-};
-
-enum MSG_TYPE {
-	TEXT,
-	ACTION
+enum MSG_TYPE {		//Toimintamerkit:
+	TEXT,			//	M
+	ACTION,			//	A
+	DIE,			//	D
+	SHUTDOWN,		//	S
+	ENDTURN,		//	E
+	TURN,			//	T
+	PING,			//	P
+	CARD			//	C
 };
 
 struct msg {
 	MSG_TYPE type;
 	char* buf;
-	std::vector<int> options;
+	char* data;
+	std::string options;
 };
 
 #endif
