@@ -7,13 +7,13 @@
 
 using namespace std;
 
-class {
+class _server {
 	public:
     sf::SocketTCP socket;
 	sf::IPAddress addr;
 } server;
 
-struct {
+struct _buf {
 	std::size_t size;
 	char data[BUFFER_SIZE];
 } buf;

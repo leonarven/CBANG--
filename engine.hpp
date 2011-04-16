@@ -13,7 +13,7 @@
 #include <cstring>
 #include "common.hpp"
 
-class
+class _Engine
 {
 public:
     msg Parse(std::string buf) { return this->Parse((char*)buf.c_str()); }
