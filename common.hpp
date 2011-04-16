@@ -6,6 +6,16 @@
 
 #include <vector>
 
+#include <sstream>
+
+template <class T>
+inline std::string to_string (const T& t)
+{
+    std::stringstream ss;
+    ss << t;
+    return ss.str();
+}
+
 enum ERRORS {
 	ERRNO_TOO_LESS_ARGS,
 	ERRNO_NOT_VALID_ADDR,

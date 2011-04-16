@@ -1,6 +1,8 @@
-#include<iostream>
+#include <iostream>
+#include <time.h>
+#include <list>
 
-#include<SFML/Network.hpp>
+#include <SFML/Network.hpp>
 
 #include "../engine.hpp"
 #include "../common.hpp"
@@ -27,7 +29,7 @@ void ServerLoop(unsigned short Port)
     while (true)
     {
         // Get the sockets ready for reading
-        unsigned int sockets = server.selector.Wait();
+        unsigned int sockets = server.selector.Wait(1);
 
         // We can read from each returned socket
         for (unsigned int i = 0; i < sockets; ++i)
@@ -40,11 +42,38 @@ void ServerLoop(unsigned short Port)
                 // If the listening socket is ready, it means that we can accept a new connection
                 sf::IPAddress Address;
                 sf::SocketTCP Client;
+
                 server.listener.Accept(Client, &Address);
                 std::cout << "Client connected ! (" << Address << ")" << std::endl;
 
+                // Send ping to client
+                sf::Packet package;
+                std::string ping("\tping " + to_string(rand()));
+                std::string ping2;
+
+                package << ping;
+                Client.Send(package);
+
+                package.Clear();
+
+                Client.Receive(package);
+                package >> ping2;
+
+                /*   */
+
+                // Ping failed
+                if (ping != ping2)
+                {
+                    //DEBUG:
+                    std::cout << "trololoo" << std::endl;
+                    exit(1234);
+                }
+
+                //TODO: mitä pitää kertoo
+
                 // Add it to the selector
                 server.selector.Add(Client);
+                server.clients.push_back(Client);
 
                 sf::Packet welcome;
                 welcome << std::string("Welcome to BANG! server");
@@ -60,14 +89,19 @@ void ServerLoop(unsigned short Port)
                     std::string Message;
                     Packet >> Message;
 
+
+
                     std::cout << "A client says : \"" << Message << "\"" << std::endl;
 
                     msg message = Engine.Parse((char *)Message.c_str());
 
-                    if (Socket.Send(Packet) != sf::Socket::Done)
-                    {
-                        std::cout << "Couldn't send data to client" << std::endl;
-                        server.selector.Remove(Socket);
+                    std::list<sf::SocketTCP>::iterator ite;
+
+                    for (ite = server.clients.begin(); ite != server.clients.end(); ite++) {
+                        if (ite->Send(Packet) != sf::Socket::Done) {
+                            std::cout << "Couldn't send data to client" << std::endl;
+                            server.selector.Remove(*ite);
+                        }
                     }
 
                 }
@@ -75,6 +109,7 @@ void ServerLoop(unsigned short Port)
                 {
                     // Error : we'd better remove the socket from the selector
                     server.selector.Remove(Socket);
+
 
                     std::cout << "Error receiving data, removing socet from selector";
                 }
@@ -92,7 +127,7 @@ void ServerLoop(unsigned short Port)
 int main()
 {
 
-
+    srand(time(NULL));
 
     // Choose a random port for opening sockets (ports < 1024 are reserved)
     const unsigned short Port = PORT;
