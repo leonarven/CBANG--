@@ -14,12 +14,11 @@ class player
 
         }
     }
-    int getHealt() { return this->health; }
-    int getMHealt() { return this->mHealth; }
-    int getRole() { return this->role; }
-    int getCharacter() { return this->character; }
-
-    void getCard(CARDS _card, bool table = false) {
+    int		getHealt()		{ return this->health; }
+    int		getMHealt()		{ return this->mHealth; }
+    int		getRole()		{ return this->role; }
+    int		getCharacter()	{ return this->character; }
+    void	getCard(CARDS _card, bool table = false) {
         if (table) {
             this->table.push_back(card(_card));
             this->cards.push_back(&this->table.back());
@@ -31,9 +30,9 @@ class player
     void setHealth(int nHealth) { this->health = nHealth; }
 
     private:
-    std::vector<card> table;
-    std::vector<card> hand;
-    std::vector<card*> cards;
+    std::vector<card>	table;
+    std::vector<card>	hand;
+    std::vector<card*>	cards;
     const int role, character, mHealth;
     int health;
 };
