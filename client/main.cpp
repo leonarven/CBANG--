@@ -89,7 +89,7 @@ int main (int argc, char **argv) {
 			std::getline(std::cin, str);
 
 			if (str[0] != '!') // str on tavallinen viesti. muotoile se niin että serverikin ymmärtää!
-                str = toMsg('M', myId, '9', str);/*string("M")+(char)(48+myId)+'9'+str;*/
+                str = toMsg('M', 0, '9', str);/*string("M")+(char)(48+myId)+'9'+str;*/
             else
                 str = str.substr(1); // ottaa huutomerkin pois
 
