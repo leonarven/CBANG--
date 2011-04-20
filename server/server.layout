@@ -1,25 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Release" />
-	<File name="../card.hpp" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor1 position="0" topLine="0" />
+	<File name="../card.hpp" open="1" top="0" tabpos="3">
+		<Cursor position="0" topLine="0" />
 	</File>
-	<File name="../common.hpp" open="1" top="0" tabpos="4" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor1 position="426" topLine="0" />
+	<File name="../common.hpp" open="1" top="0" tabpos="4">
+		<Cursor position="426" topLine="0" />
 	</File>
-	<File name="../engine.hpp" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor1 position="555" topLine="9" />
+	<File name="../engine.hpp" open="1" top="0" tabpos="5">
+		<Cursor position="555" topLine="0" />
 	</File>
-	<File name="../player.hpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor1 position="158" topLine="16" />
+	<File name="../player.hpp" open="1" top="0" tabpos="6">
+		<Cursor position="158" topLine="16" />
 	</File>
-	<File name="game.hpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor1 position="655" topLine="12" />
+	<File name="game.hpp" open="1" top="0" tabpos="2">
+		<Cursor position="655" topLine="0" />
 	</File>
-	<File name="main.cpp" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor1 position="855" topLine="18" />
-	</File>
-	<File name="server.hpp" open="1" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
-		<Cursor1 position="0" topLine="0" />
+	<File name="main.cpp" open="1" top="0" tabpos="1">
+		<Cursor position="855" topLine="0" />
 	</File>
 </CodeBlocks_layout_file>

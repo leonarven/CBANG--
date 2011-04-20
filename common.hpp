@@ -22,6 +22,19 @@ inline std::string to_string (const T& t)
     return ss.str();
 }
 
+template <class F, class T>
+std::string toMsg (char type, F from, T to, std::string str){
+    std::stringstream ss;
+    ss << type << from << to << str.c_str();
+    return ss.str();
+}
+template <class F, class T, class S>
+std::string toMsg (char type, F from, T to, S str){
+    std::stringstream ss;
+    ss << type << from << to << str;
+    return ss.str();
+}
+
 enum ERRORS {
 	ERRNO_NOT_ENOUGH_ARGS,
 	ERRNO_NOT_VALID_ADDR,
