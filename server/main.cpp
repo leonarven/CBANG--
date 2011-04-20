@@ -44,15 +44,12 @@ void ServerLoop(unsigned short Port)
                 sf::Packet welcome;
                 welcome << std::string("M09Welcome to BANG! server");
                 Client.Send(welcome);
-				INPUT("WELCOME", welcome.GetData());
 
-				std::cout << "A <<< Welcome to BANG! server" << std::endl;
-                std::cout << "  --- Client connected ! (" << Address << ")" << std::endl;
-
-
+				std::cout << "  --- Client connected ! (" << Address << ")" << std::endl;
 
                 // Ping failed
 				if (server.ping(Client)){
+                    std::cout << "   --> Ping failed" << std::endl;
                     continue; // Don't accept client
                 }
                 // Add player to game
@@ -63,8 +60,8 @@ void ServerLoop(unsigned short Port)
             else
             {
                 sf::Packet Packet;
+
                 // Else, it is a client socket so we can read the data he sent
-                DEBUG("Socket.receive")
                 if (Socket.Receive(Packet) == sf::Socket::Done)
                 {
 
@@ -79,7 +76,12 @@ void ServerLoop(unsigned short Port)
 
                     std::cout << sender->getId() << " >>> " << Message << std::endl;
 
+
                     msg message = Engine.Parse((char *)Message.c_str());
+
+                    if (message.sender != sender->getId())
+                        DEBUG("HUIJAUSYRITYS! (tai todennäköisesti bugi)")
+
                     switch (message.type)
                     {
                     case ACTION:
@@ -91,7 +93,7 @@ void ServerLoop(unsigned short Port)
                         break;
 
                     case TEXT:
-                        Game.sendToAllExceptOne(sender->getId(), Packet);
+                        Game.sendToAll(Packet);
                         break;
 
                     case ENDTURN:
@@ -102,7 +104,7 @@ void ServerLoop(unsigned short Port)
                         return;
 
                     default:
-                        std::cout << "  --- Missä huijasit?" << std::endl;
+                        std::cout << "   > Unknown message type" << std::endl;
                     }
 
                 }
@@ -110,6 +112,11 @@ void ServerLoop(unsigned short Port)
                 {
                     // Error : we'd better remove the socket from the selector
                     server.selector.Remove(Socket);
+
+
+                    //TODO: tässä kohtaa client jostain syystä lähti pelistä. tee jotain...
+
+
                     std::cout << "  --- Error receiving data, removing socet from selector" << std::endl;
                 }
             }

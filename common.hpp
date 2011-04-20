@@ -23,7 +23,7 @@ inline std::string to_string (const T& t)
 }
 
 enum ERRORS {
-	ERRNO_TOO_LESS_ARGS,
+	ERRNO_NOT_ENOUGH_ARGS,
 	ERRNO_NOT_VALID_ADDR,
 	ERRNO_CANT_CONNECT,
 	ERRNO_CANT_RECEIVE,

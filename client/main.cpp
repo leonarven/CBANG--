@@ -30,7 +30,7 @@ string str;
 int main (int argc, char **argv) {
  	if (argc<2) {
 		cout << "Käyttö: client <<Serverin osoite>>!" << endl;
-		return ERRNO_TOO_LESS_ARGS;
+		return ERRNO_NOT_ENOUGH_ARGS;
 	} else {
 		server.addr = sf::IPAddress(argv[1]);
 		if (!server.addr.IsValid()) {
@@ -44,6 +44,7 @@ int main (int argc, char **argv) {
 
 	bool Connected = true;
 
+    /* WELCOME MESSAGE */
 	packetReceive.Clear();
 	packetSend.Clear();
     cout << "Yhdistetty serverille " << server.addr << endl;
@@ -51,8 +52,8 @@ int main (int argc, char **argv) {
 	if (server.socket.Receive(packetReceive) != sf::Socket::Done)
 		Connected = false;
 	packetReceive >> str;
-	OUTPUT("WELCOME", str);
 	cout << "< Message: \"" <<  str<< "\"" << endl;
+	/* /WELCOME MESSAGE */
 
 	/* PING */
 	packetReceive.Clear();
@@ -74,9 +75,7 @@ int main (int argc, char **argv) {
 	if (server.socket.Receive(packetReceive) != sf::Socket::Done)
 		Connected = false;
 	packetReceive >> str;
-	DEBUG(str);
 	tmp = Engine.Parse(str);
-	DEBUG(tmp.target);
 	myId = (int)tmp.target;
 	cout << "< Id:      \"" << myId << "\"" << endl;
 
@@ -88,8 +87,11 @@ int main (int argc, char **argv) {
 		if (turn == myId) {
 			cout << myId << ": > ";
 			std::getline(std::cin, str);
-			str = string("M")+(char)(48+myId)+'9'+str;
 
+			if (str[0] != '!') // str on tavallinen viesti. muotoile se niin että serverikin ymmärtää!
+                str = string("M")+(char)(48+myId)+'9'+str;
+            else
+                str = str.substr(1); // ottaa huutomerkin pois
 			packetSend << str;
 			if (!str.compare("shutdown")) {
 
@@ -101,14 +103,13 @@ int main (int argc, char **argv) {
 		}
 
 		// wait for instructions from the server
-        server.socket.Receive(packetReceive);
+        Connected = (server.socket.Receive(packetReceive) == sf::Socket::Done);
         packetReceive >> str;
         tmp = Engine.Parse(str);
 
 		// Server sent empty line -> ignore it
         if (str.empty())
 			continue;
-
 
         //cout << myId << ": < \"" << str<< "\"" << endl;
 		switch(tmp.type) {
@@ -126,10 +127,12 @@ int main (int argc, char **argv) {
 				break;
 			case TEXT:
 				if (tmp.sender != myId)
-					std::cout << "< " << tmp.data << std::endl;
+					std::cout << tmp.sender << ": < " << tmp.data << std::endl;
+                break;
+
 			default:
-				std::cout << "Ominaisuus ei ole vielä valmis! ^^" << std::endl;
-		}
+				std::cout << "Viestiä \"" << str << "\" ei tunnistettu: " << std::endl;
+        }
 	}
 	cout << "Sammutetaan client" << endl;
     server.socket.Close();

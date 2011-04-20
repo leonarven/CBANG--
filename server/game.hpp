@@ -21,15 +21,12 @@ public:
 
     void AddPlayer(sf::SocketTCP _socket)
     {
-    	//TODO: Create player here
         players[_socket] = new player(_socket, players.size() + 1 ,0, 0, 4);
 
         sf::Packet packet;
-        tmp = std::string("T0");
-        tmp += to_string(players.size());
+        tmp = std::string("T0" + to_string(players.size()));
 
         packet << tmp;
-		std::cout << "TÄÄ ON SE TÄRKEE: " << tmp << std::endl;
         _socket.Send(packet);
 
         if (players.size() == minPlayersInGame)
@@ -42,9 +39,17 @@ public:
         //TODO: mitä pitää kertoo muista pelaajista
     }
 
-    player* getPlayer(sf::SocketTCP _socket)
+    player* getPlayer(sf::SocketTCP _socket) { return players[_socket]; }
+
+    void deletePlayer(sf::SocketTCP _socket)
     {
-        return players[_socket];
+        delete players[_socket];
+        players.erase(_socket);
+
+        DEBUG("POISTETTIIN PELAAJA, odotettavissa häikkää vuorosysteemissä")
+
+        if (players.size() < minPlayersInGame)
+            setTurn(0);
     }
 
     int playersCount()
@@ -52,13 +57,18 @@ public:
         return this->players.size();
     }
 
-    //void changeTurn(int _turn) { this->turn = 1 + (_turn % players.size()); }
+    void setTurn(int _turn)
+    {
+        this->turn = turn;
+        sendToAll("T0" + to_string(turn));
+    }
+
     void changeTurn()
     {
         if (++turn > players.size())
             turn = 1;
 
-        sendToAll(std::string("T0") + (char)(48+turn));
+        sendToAll(std::string("T0") + to_string(turn));
     }
 
     unsigned getTurnNumber() { return turn; }
@@ -75,9 +85,9 @@ public:
         std::map<sf::SocketTCP, player*>::iterator ite;
         for (ite = players.begin(); ite != players.end(); ite++) {
             ite->second->getSocket().Send(packet);
-
-            DEBUG("lähetetään paketti")
         }
+        packet >> tmp;
+        std::cout << "A <<< " << tmp << std::endl;
     }
 
 

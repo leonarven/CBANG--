@@ -15,8 +15,6 @@ public:
         sf::Packet packet;
         std::string ping = "P" + to_string(rand());
 
-		std::cout << "  <<< " << ping 	<< std::endl;
-
         packet << ping;
         socket.Send(packet);
         packet.Clear();
@@ -24,8 +22,6 @@ public:
 
         std::string result;
         packet >> result;
-
-		std::cout << "  >>> " << result << std::endl;
 
         return result.compare(ping);
     }

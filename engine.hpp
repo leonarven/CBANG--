@@ -19,6 +19,25 @@
 #include <cstring>
 #include "common.hpp"
 
+/*
+Kommunikaatio:
+1. yhteys muodostetaan serveriin
+2. serveri lähettää tervetuloa viestin
+3. serveri lähettää pingin joka lähetetään sellaisenaan takaisin
+4. serveri lähettää vuoronumeron
+5. kun pelaajia on tarpeeksi serveri kertoo vuoron siirtymisen pelaajalle 1.
+
+
+6.  Pelaaja lähettää serverille käskyjä
+    Serveri vastaa (aina). tarvittaessa viesti lähetetään kaikille pelaajille
+    ...
+    Pelaaja lähettää vuoronvaihdon
+    Serveri vastaa
+
+7. Serveri kertoo kaikille pelaajille
+    -> 6
+*/
+
 class _Engine
 {
 public:
@@ -33,8 +52,6 @@ public:
 
 		if (buf.length() >= 3)
 			message.data = buf.substr(3);
-
-        std::cout << message.data << std::endl;
 
         return message;
     }
