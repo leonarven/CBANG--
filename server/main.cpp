@@ -34,7 +34,6 @@ void ServerLoop(unsigned short Port)
 
             if (Socket == server.listener)
             {
-
                 // If the listening socket is ready, it means that we can accept a new connection
                 sf::IPAddress Address;
                 sf::SocketTCP Client;
@@ -75,8 +74,10 @@ void ServerLoop(unsigned short Port)
                     Packet >> Message;
                     Packet.Clear();
 
+                    std::cout << sender->getId() << " >>> " << Message << std::endl;
+
                     if (Message.length() < 3) {
-                        std::cout << "Invalid packet from: " << sender->getId() << std::endl;
+                        std::cout << "    > " << "Invalid packet" << std::endl;
 
                         Message = "M0" + to_string(sender->getId()) + "Invalid packet";
                         Packet << Message;
@@ -88,8 +89,6 @@ void ServerLoop(unsigned short Port)
                     }
 
                     Message.replace(1, 1, to_string(sender->getId()));
-
-                    std::cout << sender->getId() << " >>> " << Message << std::endl;
 
                     msg message = Engine.Parse((char *)Message.c_str());
 
@@ -115,7 +114,10 @@ void ServerLoop(unsigned short Port)
                         return;
 
                     default:
-                        std::cout << "   > Unknown message type" << std::endl;
+                        std::cout << "    > Unknown message type" << std::endl;
+                        Packet << "M0" + to_string(sender->getId()) + "Unknown message type";
+                        sender->getSocket().Send(Packet);
+                        break;
                     }
 
                 }
@@ -123,7 +125,7 @@ void ServerLoop(unsigned short Port)
                 {
                     // Error : we'd better remove the socket from the selector
                     server.selector.Remove(Socket);
-
+                    Game.deletePlayer(Socket);
 
                     //TODO: tässä kohtaa client jostain syystä lähti pelistä. tee jotain...
 
