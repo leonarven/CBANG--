@@ -28,18 +28,13 @@ public:
 		message.buf = (char *)buf.c_str();
 		message.type = (MSG_TYPE)buf[0];
 
-		DEBUG((int)buf[1])
-		DEBUG((int)buf[2])
-
 		message.sender = buf[1] - 48;
 		message.target = buf[2] - 48;
 
-		DEBUG(buf)
-		DEBUG(buf.length())
-
-		if (buf.length() >= 4)
+		if (buf.length() >= 3)
 			message.data = buf.substr(3);
 
+        std::cout << message.data << std::endl;
 
         return message;
     }

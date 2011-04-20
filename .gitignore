@@ -13,3 +13,7 @@
 
 */bin/*
 */obj/*
+
+*.depend
+*.layout
+

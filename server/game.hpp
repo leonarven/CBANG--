@@ -25,10 +25,11 @@ public:
         players[_socket] = new player(_socket, players.size() + 1 ,0, 0, 4);
 
         sf::Packet packet;
-        tmp = std::string("T0" + (char)(48+players.size()));
+        tmp = std::string("T0");
+        tmp += to_string(players.size());
+
         packet << tmp;
-		DEBUG(tmp);
-		std::cout << players[_socket]->getId() << " <<< " << std::string("T0" + (char)(48+players.size()));
+		std::cout << "TÄÄ ON SE TÄRKEE: " << tmp << std::endl;
         _socket.Send(packet);
 
         if (players.size() == minPlayersInGame)

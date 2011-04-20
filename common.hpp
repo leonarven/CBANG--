@@ -10,7 +10,7 @@
 
 #define DEBUG(str) std::cout << "DEBUG, " << __LINE__ << ": [" << str << "]" << __FILE__ << std::endl;
 #define INPUT(key, str) std::cout << key << ": " << __LINE__ << " - [" << str << "]" << std::endl;
-#define OUTPUT(key, str) std::cout << "key << ": " << __LINE__ << " - [" << str << "]" << std::endl;
+#define OUTPUT(key, str) std::cout << key << ": " << __LINE__ << " - [" << str << "]" << std::endl;
 
 unsigned minPlayersInGame = 3;
 

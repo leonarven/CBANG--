@@ -9,19 +9,25 @@
 	<SFML/Network.hpp>
 	<iostream>
 
-1302908107 source:/home/sante/Projects/BANG-/server/main.cpp
+1302960181 source:/home/sante/Projects/BANG-/server/main.cpp
 	<iostream>
+	<time.h>
+	<string.h>
 	<SFML/Network.hpp>
+	"../engine.hpp"
 	"../common.hpp"
 	"game.hpp"
+	"server.hpp"
 
-1302908720 /home/sante/Projects/BANG-/common.hpp
+1302960286 /home/sante/Projects/BANG-/common.hpp
 	<vector>
+	<sstream>
 
-1302908396 /home/sante/Projects/BANG-/server/game.hpp
-	<vector>
-	<cstdlib>
-	<cstring>
+1303316390 /home/sante/Projects/BANG-/server/game.hpp
+	<SFML/Network.hpp>
+	<map>
+	"server.hpp"
+	"../player.hpp"
 	"../common.hpp"
 
 1302957616 source:/media/Windows/Users/leonarven/Ohjelmointi/C++/BANG-/server/main.cpp
@@ -62,4 +68,22 @@
 
 1302946434 /media/Windows/Users/leonarven/Ohjelmointi/C++/BANG-/server/server.hpp
 	<SFML/Network.hpp>
+
+1302960625 /home/sante/Projects/BANG-/engine.hpp
+	<SFML/Network.hpp>
+	<vector>
+	<cstdlib>
+	<cstring>
+	"common.hpp"
+
+1302944858 /home/sante/Projects/BANG-/server/server.hpp
+	<SFML/Network.hpp>
+
+1302928646 /home/sante/Projects/BANG-/player.hpp
+	"common.hpp"
+	"card.hpp"
+	<SFML/Network.hpp>
+
+1302917337 /home/sante/Projects/BANG-/card.hpp
+	"common.hpp"
 

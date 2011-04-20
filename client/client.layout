@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 <CodeBlocks_layout_file>
 	<ActiveTarget name="Release" />
-	<File name="../card.hpp" open="0" top="0" tabpos="0">
-		<Cursor position="150" topLine="0" />
+	<File name="../card.hpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="150" topLine="0" />
 	</File>
-	<File name="main.cpp" open="1" top="1" tabpos="0">
-		<Cursor position="1091" topLine="20" />
+	<File name="main.cpp" open="1" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="2002" topLine="56" />
 	</File>
-	<File name="../common.hpp" open="0" top="0" tabpos="0">
-		<Cursor position="584" topLine="0" />
+	<File name="../common.hpp" open="1" top="1" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="584" topLine="0" />
 	</File>
-	<File name="../engine.hpp" open="0" top="0" tabpos="0">
-		<Cursor position="416" topLine="0" />
+	<File name="../engine.hpp" open="1" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="416" topLine="0" />
 	</File>
-	<File name="../player.hpp" open="0" top="0" tabpos="0">
-		<Cursor position="1317" topLine="0" />
+	<File name="../player.hpp" open="0" top="0" tabpos="0" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor1 position="1317" topLine="0" />
 	</File>
 </CodeBlocks_layout_file>

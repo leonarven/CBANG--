@@ -46,6 +46,7 @@
 		<Unit filename="../player.hpp" />
 		<Unit filename="game.hpp" />
 		<Unit filename="main.cpp" />
+		<Unit filename="server.hpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
