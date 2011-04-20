@@ -73,14 +73,25 @@ void ServerLoop(unsigned short Port)
 
                     std::string Message;
                     Packet >> Message;
+                    Packet.Clear();
+
+                    if (Message.length() < 3) {
+                        std::cout << "Invalid packet from: " << sender->getId() << std::endl;
+
+                        Message = "M0" + to_string(sender->getId()) + "Invalid packet";
+                        Packet << Message;
+
+                        //Return to sender
+                        sender->getSocket().Send(Packet);
+
+                        continue;
+                    }
+
+                    Message.replace(1, 1, to_string(sender->getId()));
 
                     std::cout << sender->getId() << " >>> " << Message << std::endl;
 
-
                     msg message = Engine.Parse((char *)Message.c_str());
-
-                    if (message.sender != sender->getId())
-                        DEBUG("HUIJAUSYRITYS! (tai todennäköisesti bugi)")
 
                     switch (message.type)
                     {
@@ -93,7 +104,7 @@ void ServerLoop(unsigned short Port)
                         break;
 
                     case TEXT:
-                        Game.sendToAll(Packet);
+                        Game.sendToAll(Message);
                         break;
 
                     case ENDTURN:

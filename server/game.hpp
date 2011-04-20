@@ -86,8 +86,6 @@ public:
         for (ite = players.begin(); ite != players.end(); ite++) {
             ite->second->getSocket().Send(packet);
         }
-        packet >> tmp;
-        std::cout << "A <<< " << tmp << std::endl;
     }
 
 
